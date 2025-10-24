@@ -4,8 +4,8 @@
  */
 package com.clinicarodriguez.clinicarodriguez.repository;
 
-import com.clinicarodriguez.clinicarodriguez.model.Paciente;
+import com.clinicarodriguez.clinicarodriguez.model.Medicos;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+public interface MedicosRepository extends JpaRepository<Medicos, Long> {
 }
