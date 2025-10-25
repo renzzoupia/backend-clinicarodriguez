@@ -86,11 +86,15 @@ public class UsuariosController {
 
         try {
             Usuarios existingUsuario = data.get();
-            existingUsuario.setUsuaNombre(usuario.getUsuaNombre());
+            existingUsuario.setUsuaUsername(usuario.getUsuaUsername());
+            existingUsuario.setUsuaNombrecompleto(usuario.getUsuaNombrecompleto());
+            existingUsuario.setUsuaClave(usuario.getUsuaClave());
+            existingUsuario.setUsuaDni(usuario.getUsuaDni());
             existingUsuario.setUsuaEmail(usuario.getUsuaEmail());
-            existingUsuario.setUsuaPassword(usuario.getUsuaPassword());
-            existingUsuario.setUsuaRol(usuario.getUsuaRol());
-            existingUsuario.setUsuaEstado(usuario.getUsuaEstado());
+            existingUsuario.setUsuaTelefono(usuario.getUsuaTelefono());
+            existingUsuario.setUsuaFotoUrl(usuario.getUsuaFotoUrl());
+            //existingUsuario.setUsuaEstado(usuario.getUsuaEstado());
+            existingUsuario.setUsuaEsActivo(usuario.getUsuaEsActivo());
             usuariosRepository.save(existingUsuario);
 
             result.put("success", true);
