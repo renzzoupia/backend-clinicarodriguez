@@ -1,0 +1,40 @@
+# Directorios de build
+target/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentación
+README.md
+*.md
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+nbproject/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+*~
+
+# Uploads locales (se crean en el contenedor)
+uploads/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

@@ -3,10 +3,14 @@ package com.clinicarodriguez.clinicarodriguez.controller;
 import com.clinicarodriguez.clinicarodriguez.dto.AuthResponse;
 import com.clinicarodriguez.clinicarodriguez.dto.LoginRequest;
 import com.clinicarodriguez.clinicarodriguez.model.Usuarios;
+import com.clinicarodriguez.clinicarodriguez.model.UsuariosRoles;
 import com.clinicarodriguez.clinicarodriguez.security.JwtTokenProvider;
 import com.clinicarodriguez.clinicarodriguez.service.UsuariosService;
+import com.clinicarodriguez.clinicarodriguez.service.UsuariosRolesService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = {"http://localhost:4200"})
+@CrossOrigin(origins = {"http://localhost"})
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -26,6 +30,9 @@ public class AuthController {
     
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    
+    @Autowired
+    private UsuariosRolesService usuariosRolesService;
     
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -66,11 +73,22 @@ public class AuthController {
             // Actualizar última sesión
             usuariosService.actualizarUltimaSesion(usuario.getUsuaId());
             
+            // Obtener roles del usuario
+            List<UsuariosRoles> usuariosRoles = usuariosRolesService.obtenerRolesDeUsuario(usuario.getUsuaId());
+            
+            // Extraer nombres de roles
+            List<String> rolesNombres = usuariosRoles.stream()
+                    .map(ur -> ur.getRole().getRoleName())
+                    .collect(Collectors.toList());
+            
+            // Usar el primer rol para el token, o "USER" por defecto
+            String rolePrincipal = rolesNombres.isEmpty() ? "USER" : rolesNombres.get(0);
+            
             // Generar token JWT
             String token = jwtTokenProvider.generateToken(
                 usuario.getUsuaUsername(), 
                 usuario.getUsuaId(),
-                "USER"  // Puedes usar usuario.getUsuaRol() si tienes roles en UsuariosRoles
+                rolePrincipal
             );
             
             // Preparar respuesta
@@ -81,6 +99,8 @@ public class AuthController {
             result.put("success", true);
             result.put("message", "Login exitoso");
             result.put("data", authResponse);
+            result.put("roles", rolesNombres);  // Agregar lista de roles
+            result.put("usuariosRoles", usuariosRoles);  // Información completa de roles
             
             return new ResponseEntity<>(result, HttpStatus.OK);
             
