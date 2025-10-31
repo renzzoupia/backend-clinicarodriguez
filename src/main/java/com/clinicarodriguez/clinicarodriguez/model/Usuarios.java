@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -49,6 +51,10 @@ public class Usuarios implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsuariosRoles> usuariosRoles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<ActivosTecnologicos> activosTecnologicos = new ArrayList<>();
 
     public Long getUsuaId() {
         return usuaId;
@@ -136,6 +142,14 @@ public class Usuarios implements Serializable {
 
     public void setUsuariosRoles(Set<UsuariosRoles> usuariosRoles) {
         this.usuariosRoles = usuariosRoles;
+    }
+
+    public List<ActivosTecnologicos> getActivosTecnologicos() {
+        return activosTecnologicos;
+    }
+
+    public void setActivosTecnologicos(List<ActivosTecnologicos> activosTecnologicos) {
+        this.activosTecnologicos = activosTecnologicos;
     }
 }
 

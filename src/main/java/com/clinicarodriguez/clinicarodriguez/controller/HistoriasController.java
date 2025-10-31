@@ -3,6 +3,7 @@ package com.clinicarodriguez.clinicarodriguez.controller;
 import com.clinicarodriguez.clinicarodriguez.model.Historias;
 import com.clinicarodriguez.clinicarodriguez.service.HistoriasService;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,20 +143,13 @@ public class HistoriasController {
 
             existing.setUsuario(historia.getUsuario());
             existing.setPaciente(historia.getPaciente());
+            existing.setHistNumHistoria(historia.getHistNumHistoria());
             existing.setHistFecha(historia.getHistFecha());
-            existing.setHistEdad(historia.getHistEdad());
-            existing.setHistTalla(historia.getHistTalla());
+            existing.setHistTalle(historia.getHistTalle());
             existing.setHistPeso(historia.getHistPeso());
-            existing.setHistPreMmhg(historia.getHistPreMmhg());
-            existing.setHistFrecResX(historia.getHistFrecResX());
-            existing.setHistFrecCardiacaX(historia.getHistFrecCardiacaX());
-            existing.setHistImc(historia.getHistImc());
-            existing.setHistMotivo(historia.getHistMotivo());
-            existing.setHistExamenFisico(historia.getHistExamenFisico());
-            existing.setHistDiagnostico(historia.getHistDiagnostico());
-            existing.setHistTratamiento(historia.getHistTratamiento());
-            existing.setHistUrlPdf(historia.getHistUrlPdf());
             existing.setHistTemperaturaC(historia.getHistTemperaturaC());
+            existing.setHistFrecCardiaca(historia.getHistFrecCardiaca());
+            existing.setHistEstado(historia.getHistEstado());
             
             Historias updated = historiasService.save(existing);
 

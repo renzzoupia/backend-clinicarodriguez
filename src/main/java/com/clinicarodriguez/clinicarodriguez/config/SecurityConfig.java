@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()  // Login y registro públicos
                 
                 // Endpoints protegidos con JWT
-                .requestMatchers("/api/pacientes/**").authenticated()  // Requiere JWT
+                //.requestMatchers("/api/pacientes/**").authenticated()  // Requiere JWT
                 
                 // Todos los demás endpoints (temporal: sin protección)
                 .anyRequest().permitAll()  // Otros endpoints aún sin JWT

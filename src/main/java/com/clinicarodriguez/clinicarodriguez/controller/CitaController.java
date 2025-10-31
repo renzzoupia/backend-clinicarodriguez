@@ -157,9 +157,9 @@ public class CitaController {
         
         try {
             // Validaciones básicas
-            if (cita.getPaciente() == null || cita.getUsuario() == null) {
+            if (cita.getPaciente() == null || cita.getUsuario() == null || cita.getMedico() == null) {
                 result.put("success", false);
-                result.put("message", "Paciente y Usuario son requeridos");
+                result.put("message", "Paciente, Usuario y Médico son requeridos");
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
             
@@ -199,11 +199,13 @@ public class CitaController {
             // Actualizar campos
             citaExistente.setUsuario(cita.getUsuario());
             citaExistente.setPaciente(cita.getPaciente());
+            citaExistente.setMedico(cita.getMedico());
             citaExistente.setCitaFecha(cita.getCitaFecha());
             citaExistente.setCitaHora(cita.getCitaHora());
-            citaExistente.setCitaCupo(cita.getCitaCupo());
-            citaExistente.setCitaFechaImpresion(cita.getCitaFechaImpresion());
+            citaExistente.setCitaTipo(cita.getCitaTipo());
+            citaExistente.setCitaMotivo(cita.getCitaMotivo());
             citaExistente.setCitaEstado(cita.getCitaEstado());
+            citaExistente.setCitaFechaRegistro(cita.getCitaFechaRegistro());
             
             Cita citaActualizada = citaService.save(citaExistente);
 

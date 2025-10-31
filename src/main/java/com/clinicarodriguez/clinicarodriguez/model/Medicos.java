@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -43,6 +45,10 @@ public class Medicos implements Serializable{
     @JsonIgnore
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MedicosEspecialidades> medicosEspecialidades = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL)
+    private List<Cita> citas = new ArrayList<>();
 
     public Long getMediId() {
         return mediId;
@@ -114,5 +120,13 @@ public class Medicos implements Serializable{
 
     public void setMedicosEspecialidades(Set<MedicosEspecialidades> medicosEspecialidades) {
         this.medicosEspecialidades = medicosEspecialidades;
+    }
+
+    public List<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
     }
 }

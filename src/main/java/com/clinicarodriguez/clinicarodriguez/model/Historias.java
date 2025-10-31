@@ -3,10 +3,7 @@ package com.clinicarodriguez.clinicarodriguez.model;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "historias")
@@ -25,51 +22,26 @@ public class Historias implements Serializable {
     @JoinColumn(name = "hist_paci_id", nullable = false)
     private Paciente paciente;
 
+    @Column(name = "hist_num_historia")
+    private Integer histNumHistoria;
+
     @Column(name = "hist_fecha")
-    private LocalDate histFecha;
+    private LocalDateTime histFecha;
 
-    @Column(name = "hist_edad")
-    private Integer histEdad;
-
-    @Column(name = "hist_talla", precision = 10, scale = 2)
-    private BigDecimal histTalla;
+    @Column(name = "hist_talle", precision = 10, scale = 2)
+    private BigDecimal histTalle;
 
     @Column(name = "hist_peso", precision = 10, scale = 3)
     private BigDecimal histPeso;
 
-    @Column(name = "hist_pre_mmhg", length = 100)
-    private String histPreMmhg;  // Presión arterial
-
-    @Column(name = "hist_frec_res_x", length = 20)
-    private String histFrecResX;  // Frecuencia respiratoria
-
-    @Column(name = "hist_frec_cardiaca_x", precision = 10, scale = 2)
-    private BigDecimal histFrecCardiacaX;
-
-    @Column(name = "hist_imc", precision = 10, scale = 1)
-    private BigDecimal histImc;  // Índice de masa corporal
-
-    @Column(name = "hist_motivo", length = 100)
-    private String histMotivo;
-
-    @Column(name = "hist_examen_fisico", length = 255)
-    private String histExamenFisico;
-
-    @Column(name = "hist_diagnostico", columnDefinition = "TEXT")
-    private String histDiagnostico;
-
-    @Column(name = "hist_tratamiento", length = 255)
-    private String histTratamiento;
-
-    @Column(name = "hist_url_pdf", length = 255)
-    private String histUrlPdf;
-
     @Column(name = "hist_temperatura_c", precision = 10, scale = 2)
     private BigDecimal histTemperaturaC;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "historia", cascade = CascadeType.ALL)
-    private Set<Documentos> documentos = new HashSet<>();
+    @Column(name = "hist_frec_cardiaca", precision = 10, scale = 2)
+    private BigDecimal histFrecCardiaca;
+
+    @Column(name = "hist_estado")
+    private Integer histEstado;
 
     public Long getHistId() {
         return histId;
@@ -95,28 +67,28 @@ public class Historias implements Serializable {
         this.paciente = paciente;
     }
 
-    public LocalDate getHistFecha() {
+    public Integer getHistNumHistoria() {
+        return histNumHistoria;
+    }
+
+    public void setHistNumHistoria(Integer histNumHistoria) {
+        this.histNumHistoria = histNumHistoria;
+    }
+
+    public LocalDateTime getHistFecha() {
         return histFecha;
     }
 
-    public void setHistFecha(LocalDate histFecha) {
+    public void setHistFecha(LocalDateTime histFecha) {
         this.histFecha = histFecha;
     }
 
-    public Integer getHistEdad() {
-        return histEdad;
+    public BigDecimal getHistTalle() {
+        return histTalle;
     }
 
-    public void setHistEdad(Integer histEdad) {
-        this.histEdad = histEdad;
-    }
-
-    public BigDecimal getHistTalla() {
-        return histTalla;
-    }
-
-    public void setHistTalla(BigDecimal histTalla) {
-        this.histTalla = histTalla;
+    public void setHistTalle(BigDecimal histTalle) {
+        this.histTalle = histTalle;
     }
 
     public BigDecimal getHistPeso() {
@@ -127,78 +99,6 @@ public class Historias implements Serializable {
         this.histPeso = histPeso;
     }
 
-    public String getHistPreMmhg() {
-        return histPreMmhg;
-    }
-
-    public void setHistPreMmhg(String histPreMmhg) {
-        this.histPreMmhg = histPreMmhg;
-    }
-
-    public String getHistFrecResX() {
-        return histFrecResX;
-    }
-
-    public void setHistFrecResX(String histFrecResX) {
-        this.histFrecResX = histFrecResX;
-    }
-
-    public BigDecimal getHistFrecCardiacaX() {
-        return histFrecCardiacaX;
-    }
-
-    public void setHistFrecCardiacaX(BigDecimal histFrecCardiacaX) {
-        this.histFrecCardiacaX = histFrecCardiacaX;
-    }
-
-    public BigDecimal getHistImc() {
-        return histImc;
-    }
-
-    public void setHistImc(BigDecimal histImc) {
-        this.histImc = histImc;
-    }
-
-    public String getHistMotivo() {
-        return histMotivo;
-    }
-
-    public void setHistMotivo(String histMotivo) {
-        this.histMotivo = histMotivo;
-    }
-
-    public String getHistExamenFisico() {
-        return histExamenFisico;
-    }
-
-    public void setHistExamenFisico(String histExamenFisico) {
-        this.histExamenFisico = histExamenFisico;
-    }
-
-    public String getHistDiagnostico() {
-        return histDiagnostico;
-    }
-
-    public void setHistDiagnostico(String histDiagnostico) {
-        this.histDiagnostico = histDiagnostico;
-    }
-
-    public String getHistTratamiento() {
-        return histTratamiento;
-    }
-
-    public void setHistTratamiento(String histTratamiento) {
-        this.histTratamiento = histTratamiento;
-    }
-
-    public String getHistUrlPdf() {
-        return histUrlPdf;
-    }
-
-    public void setHistUrlPdf(String histUrlPdf) {
-        this.histUrlPdf = histUrlPdf;
-    }
-
     public BigDecimal getHistTemperaturaC() {
         return histTemperaturaC;
     }
@@ -207,11 +107,19 @@ public class Historias implements Serializable {
         this.histTemperaturaC = histTemperaturaC;
     }
 
-    public Set<Documentos> getDocumentos() {
-        return documentos;
+    public BigDecimal getHistFrecCardiaca() {
+        return histFrecCardiaca;
     }
 
-    public void setDocumentos(Set<Documentos> documentos) {
-        this.documentos = documentos;
+    public void setHistFrecCardiaca(BigDecimal histFrecCardiaca) {
+        this.histFrecCardiaca = histFrecCardiaca;
+    }
+
+    public Integer getHistEstado() {
+        return histEstado;
+    }
+
+    public void setHistEstado(Integer histEstado) {
+        this.histEstado = histEstado;
     }
 }

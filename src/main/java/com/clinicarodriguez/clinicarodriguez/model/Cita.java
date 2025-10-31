@@ -22,20 +22,27 @@ public class Cita implements Serializable {
     @JoinColumn(name = "cita_paci_id", nullable = false)
     private Paciente paciente;
 
+    @ManyToOne
+    @JoinColumn(name = "cita_medi_id", nullable = false)
+    private Medicos medico;
+
     @Column(name = "cita_fecha")
     private LocalDate citaFecha;
 
-    @Column(name = "cita_hora", length = 50)
-    private String citaHora;  // Puede ser varchar o LocalTime
+    @Column(name = "cita_hora")
+    private LocalTime citaHora;
 
-    @Column(name = "cita_cupo")
-    private Integer citaCupo;
+    @Column(name = "cita_tipo", length = 100)
+    private String citaTipo;
 
-    @Column(name = "cita_fecha_impresion", length = 100)
-    private String citaFechaImpresion;
+    @Column(name = "cita_motivo", length = 500)
+    private String citaMotivo;
 
-    @Column(name = "cita_estado", length = 25)
+    @Column(name = "cita_estado", length = 50)
     private String citaEstado;
+
+    @Column(name = "cita_fecha_registro")
+    private LocalDate citaFechaRegistro;
 
     public Long getCitaId() {
         return citaId;
@@ -61,6 +68,14 @@ public class Cita implements Serializable {
         this.paciente = paciente;
     }
 
+    public Medicos getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medicos medico) {
+        this.medico = medico;
+    }
+
     public LocalDate getCitaFecha() {
         return citaFecha;
     }
@@ -69,28 +84,28 @@ public class Cita implements Serializable {
         this.citaFecha = citaFecha;
     }
 
-    public String getCitaHora() {
+    public LocalTime getCitaHora() {
         return citaHora;
     }
 
-    public void setCitaHora(String citaHora) {
+    public void setCitaHora(LocalTime citaHora) {
         this.citaHora = citaHora;
     }
 
-    public Integer getCitaCupo() {
-        return citaCupo;
+    public String getCitaTipo() {
+        return citaTipo;
     }
 
-    public void setCitaCupo(Integer citaCupo) {
-        this.citaCupo = citaCupo;
+    public void setCitaTipo(String citaTipo) {
+        this.citaTipo = citaTipo;
     }
 
-    public String getCitaFechaImpresion() {
-        return citaFechaImpresion;
+    public String getCitaMotivo() {
+        return citaMotivo;
     }
 
-    public void setCitaFechaImpresion(String citaFechaImpresion) {
-        this.citaFechaImpresion = citaFechaImpresion;
+    public void setCitaMotivo(String citaMotivo) {
+        this.citaMotivo = citaMotivo;
     }
 
     public String getCitaEstado() {
@@ -99,5 +114,13 @@ public class Cita implements Serializable {
 
     public void setCitaEstado(String citaEstado) {
         this.citaEstado = citaEstado;
+    }
+
+    public LocalDate getCitaFechaRegistro() {
+        return citaFechaRegistro;
+    }
+
+    public void setCitaFechaRegistro(LocalDate citaFechaRegistro) {
+        this.citaFechaRegistro = citaFechaRegistro;
     }
 }
