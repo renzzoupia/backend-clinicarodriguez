@@ -21,7 +21,7 @@ public class Dias implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "dia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DiaUsuario> diaUsuarios = new HashSet<>();
+    private Set<DiasMedico> diasMedicos = new HashSet<>();
 
     public Integer getDiasId() {
         return diasId;
@@ -39,12 +39,12 @@ public class Dias implements Serializable {
         this.dia = dia;
     }
 
-    public Set<DiaUsuario> getDiaUsuarios() {
-        return diaUsuarios;
+    public Set<DiasMedico> getDiasMedicos() {
+        return diasMedicos;
     }
 
-    public void setDiaUsuarios(Set<DiaUsuario> diaUsuarios) {
-        this.diaUsuarios = diaUsuarios;
+    public void setDiasMedicos(Set<DiasMedico> diasMedicos) {
+        this.diasMedicos = diasMedicos;
     }
 
     // Enum para los días de la semana

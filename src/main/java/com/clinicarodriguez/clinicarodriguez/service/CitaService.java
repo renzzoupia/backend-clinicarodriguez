@@ -20,17 +20,17 @@ public interface CitaService {
     // Métodos personalizados
     public List<Cita> findByPacienteId(Long pacienteId);
     
-    public List<Cita> findByUsuarioId(Long usuarioId);
+    public List<Cita> findByMedicoId(Long medicoId);
     
     public List<Cita> findByCitaFecha(LocalDate fecha);
     
-    public List<Cita> findByUsuarioIdAndFecha(Long usuarioId, LocalDate fecha);
+    public List<Cita> findByMedicoIdAndFecha(Long medicoId, LocalDate fecha);
     
     public List<Cita> findByCitaEstado(String estado);
     
     public List<Cita> findByFechaRange(LocalDate fechaInicio, LocalDate fechaFin);
     
-    public long countByUsuarioAndFecha(Long usuarioId, LocalDate fecha);
+    public long countByMedicoAndFecha(Long medicoId, LocalDate fecha);
     
     public List<Cita> findProximasCitasByPaciente(Long pacienteId);
 }

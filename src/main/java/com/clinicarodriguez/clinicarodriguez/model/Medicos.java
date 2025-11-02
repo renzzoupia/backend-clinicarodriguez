@@ -27,20 +27,15 @@ public class Medicos implements Serializable{
     @Column(name = "medi_apellidos")
     private String mediApellido;
     
-    @Column(name = "medi_dni")
-    private String mediDni;
-    
-    @Column(name = "medi_email")
-    private String mediEmail;
-    
-    @Column(name = "medi_telefono")
-    private String mediTelefono;
-    
     @Column(name = "medi_foto_url")
     private String mediFotoUrl;
     
     @Column(name = "medi_estado")
     private String mediEstado;
+
+    @OneToOne
+    @JoinColumn(name = "medi_usua_id", unique = true)
+    private Usuarios usuario;
 
     @JsonIgnore
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -49,6 +44,10 @@ public class Medicos implements Serializable{
     @JsonIgnore
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL)
     private List<Cita> citas = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<DiasMedico> diasMedicos = new HashSet<>();
 
     public Long getMediId() {
         return mediId;
@@ -74,30 +73,6 @@ public class Medicos implements Serializable{
         this.mediApellido = mediApellido;
     }
 
-    public String getMediDni() {
-        return mediDni;
-    }
-
-    public void setMediDni(String mediDni) {
-        this.mediDni = mediDni;
-    }
-
-    public String getMediEmail() {
-        return mediEmail;
-    }
-
-    public void setMediEmail(String mediEmail) {
-        this.mediEmail = mediEmail;
-    }
-
-    public String getMediTelefono() {
-        return mediTelefono;
-    }
-
-    public void setMediTelefono(String mediTelefono) {
-        this.mediTelefono = mediTelefono;
-    }
-
     public String getMediFotoUrl() {
         return mediFotoUrl;
     }
@@ -114,6 +89,14 @@ public class Medicos implements Serializable{
         this.mediEstado = mediEstado;
     }
 
+    public Usuarios getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuarios usuario) {
+        this.usuario = usuario;
+    }
+
     public Set<MedicosEspecialidades> getMedicosEspecialidades() {
         return medicosEspecialidades;
     }
@@ -128,5 +111,13 @@ public class Medicos implements Serializable{
 
     public void setCitas(List<Cita> citas) {
         this.citas = citas;
+    }
+
+    public Set<DiasMedico> getDiasMedicos() {
+        return diasMedicos;
+    }
+
+    public void setDiasMedicos(Set<DiasMedico> diasMedicos) {
+        this.diasMedicos = diasMedicos;
     }
 }

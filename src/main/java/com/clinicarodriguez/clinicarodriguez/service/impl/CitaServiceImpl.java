@@ -53,8 +53,8 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public List<Cita> findByUsuarioId(Long usuarioId) {
-        return citaRepository.findByUsuarioId(usuarioId);
+    public List<Cita> findByMedicoId(Long medicoId) {
+        return citaRepository.findByMedicoId(medicoId);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public List<Cita> findByUsuarioIdAndFecha(Long usuarioId, LocalDate fecha) {
-        return citaRepository.findByUsuarioIdAndFecha(usuarioId, fecha);
+    public List<Cita> findByMedicoIdAndFecha(Long medicoId, LocalDate fecha) {
+        return citaRepository.findByMedicoIdAndFecha(medicoId, fecha);
     }
 
     @Override
@@ -78,8 +78,8 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public long countByUsuarioAndFecha(Long usuarioId, LocalDate fecha) {
-        return citaRepository.countByUsuarioAndFecha(usuarioId, fecha);
+    public long countByMedicoAndFecha(Long medicoId, LocalDate fecha) {
+        return citaRepository.countByMedicoAndFecha(medicoId, fecha);
     }
 
     @Override

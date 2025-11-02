@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class PasswordConfig {
      @Bean
     public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder(); //para encriptar contraseña
+        //return NoOpPasswordEncoder.getInstance(); //para no usar encriptacion de contreaseña
     }
 }

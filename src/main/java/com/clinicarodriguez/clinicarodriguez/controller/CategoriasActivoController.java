@@ -2,6 +2,7 @@ package com.clinicarodriguez.clinicarodriguez.controller;
 
 import com.clinicarodriguez.clinicarodriguez.model.CategoriasActivo;
 import com.clinicarodriguez.clinicarodriguez.service.CategoriasActivoService;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,76 +18,191 @@ public class CategoriasActivoController {
     @Autowired
     private CategoriasActivoService categoriasActivoService;
 
+    // Listar todas las categorías
     @GetMapping
-    public ResponseEntity<List<CategoriasActivo>> findAll() {
-        List<CategoriasActivo> categorias = categoriasActivoService.findAll();
-        return ResponseEntity.ok(categorias);
+    public ResponseEntity<?> findAll() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "Lista de Categorías de Activo");
+        result.put("data", categoriasActivoService.findAll());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    // Obtener categoría por ID
     @GetMapping("/{id}")
-    public ResponseEntity<CategoriasActivo> findById(@PathVariable Integer id) {
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
+        HashMap<String, Object> result = new HashMap<>();
         Optional<CategoriasActivo> categoria = categoriasActivoService.findById(id);
-        return categoria.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+        if (categoria.isPresent()) {
+            result.put("success", true);
+            result.put("message", "Categoría encontrada");
+            result.put("data", categoria.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("success", false);
+            result.put("message", "No se encontró la categoría con id: " + id);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
     }
 
+    // Buscar categoría por nombre
+    @GetMapping("/nombre/{nombreCategoria}")
+    public ResponseEntity<?> findByNombreCategoria(@PathVariable String nombreCategoria) {
+        HashMap<String, Object> result = new HashMap<>();
+        Optional<CategoriasActivo> categoria = categoriasActivoService.findByNombreCategoria(nombreCategoria);
+
+        if (categoria.isPresent()) {
+            result.put("success", true);
+            result.put("message", "Categoría encontrada");
+            result.put("data", categoria.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("success", false);
+            result.put("message", "No se encontró categoría con nombre: " + nombreCategoria);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Buscar categorías por estado
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<?> findByEstado(@PathVariable Integer estado) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<CategoriasActivo> categorias = categoriasActivoService.findByEstado(estado);
+        
+        result.put("success", true);
+        result.put("message", "Categorías con estado: " + estado);
+        result.put("data", categorias);
+        result.put("total", categorias.size());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    // Verificar si existe categoría por nombre
+    @GetMapping("/exists/{nombreCategoria}")
+    public ResponseEntity<?> existsByNombreCategoria(@PathVariable String nombreCategoria) {
+        HashMap<String, Object> result = new HashMap<>();
+        boolean exists = categoriasActivoService.existsByNombreCategoria(nombreCategoria);
+        
+        result.put("success", true);
+        result.put("message", "Verificación de nombre de categoría");
+        result.put("exists", exists);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    // Crear categoría
     @PostMapping
     public ResponseEntity<?> create(@RequestBody CategoriasActivo categoriasActivo) {
+        HashMap<String, Object> result = new HashMap<>();
+        
         try {
-            if (categoriasActivoService.existsByNombreCategoria(categoriasActivo.getCaacNombreCategoria())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Ya existe una categoría con ese nombre");
+            // Validaciones básicas
+            if (categoriasActivo.getCaacNombreCategoria() == null || categoriasActivo.getCaacNombreCategoria().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El nombre de la categoría es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
+            
+            // Verificar si el nombre de categoría ya existe
+            if (categoriasActivoService.existsByNombreCategoria(categoriasActivo.getCaacNombreCategoria())) {
+                result.put("success", false);
+                result.put("message", "Ya existe una categoría con el nombre: " + categoriasActivo.getCaacNombreCategoria());
+                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+            }
+            
             CategoriasActivo nuevaCategoria = categoriasActivoService.save(categoriasActivo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCategoria);
+            result.put("success", true);
+            result.put("message", "Categoría creada exitosamente");
+            result.put("data", nuevaCategoria);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+            
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al crear la categoría: " + e.getMessage());
+            result.put("success", false);
+            result.put("message", "Error al crear la categoría: " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    // Actualizar categoría
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody CategoriasActivo categoriasActivo) {
+        HashMap<String, Object> result = new HashMap<>();
+        
         try {
+            Optional<CategoriasActivo> categoriaExistente = categoriasActivoService.findById(id);
+
+            if (categoriaExistente.isEmpty()) {
+                result.put("success", false);
+                result.put("message", "No existe categoría con Id: " + id);
+                return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+            }
+
+            // Verificar si el nuevo nombre ya existe (excluyendo la categoría actual)
+            CategoriasActivo categoriaActual = categoriaExistente.get();
+            if (!categoriaActual.getCaacNombreCategoria().equals(categoriasActivo.getCaacNombreCategoria()) &&
+                categoriasActivoService.existsByNombreCategoria(categoriasActivo.getCaacNombreCategoria())) {
+                result.put("success", false);
+                result.put("message", "Ya existe una categoría con el nombre: " + categoriasActivo.getCaacNombreCategoria());
+                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
+            }
+
             CategoriasActivo categoriaActualizada = categoriasActivoService.update(id, categoriasActivo);
-            return ResponseEntity.ok(categoriaActualizada);
+            
+            result.put("success", true);
+            result.put("message", "Categoría actualizada correctamente");
+            result.put("data", categoriaActualizada);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+            
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error al actualizar: " + e.getMessage());
+            result.put("success", false);
+            result.put("message", "Error al actualizar: " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        } catch (Exception ex) {
+            result.put("success", false);
+            result.put("message", "Error interno al actualizar: " + ex.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    // Eliminar categoría
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        Optional<CategoriasActivo> categoria = categoriasActivoService.findById(id);
+
+        if (categoria.isEmpty()) {
+            result.put("success", false);
+            result.put("message", "No existe categoría con id: " + id);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+
         try {
-            Optional<CategoriasActivo> categoria = categoriasActivoService.findById(id);
-            if (categoria.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
+            // Aquí podrías agregar validaciones adicionales
+            // Por ejemplo, verificar si la categoría tiene activos asociados
+            // antes de permitir la eliminación
+            
             categoriasActivoService.deleteById(id);
-            return ResponseEntity.ok("Categoría eliminada correctamente");
+            result.put("success", true);
+            result.put("message", "Categoría eliminada correctamente");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al eliminar la categoría: " + e.getMessage());
+            result.put("success", false);
+            result.put("message", "Error al eliminar la categoría: " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/nombre/{nombreCategoria}")
-    public ResponseEntity<CategoriasActivo> findByNombreCategoria(@PathVariable String nombreCategoria) {
-        Optional<CategoriasActivo> categoria = categoriasActivoService.findByNombreCategoria(nombreCategoria);
-        return categoria.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
-    @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<CategoriasActivo>> findByEstado(@PathVariable Integer estado) {
-        List<CategoriasActivo> categorias = categoriasActivoService.findByEstado(estado);
-        return ResponseEntity.ok(categorias);
-    }
-
-    @GetMapping("/exists/{nombreCategoria}")
-    public ResponseEntity<Boolean> existsByNombreCategoria(@PathVariable String nombreCategoria) {
-        boolean exists = categoriasActivoService.existsByNombreCategoria(nombreCategoria);
-        return ResponseEntity.ok(exists);
+    // Endpoint adicional: Listar categorías activas
+    @GetMapping("/activas")
+    public ResponseEntity<?> findActivas() {
+        HashMap<String, Object> result = new HashMap<>();
+        List<CategoriasActivo> categoriasActivas = categoriasActivoService.findByEstado(1); // Asumiendo que 1 = activo
+        
+        result.put("success", true);
+        result.put("message", "Categorías activas");
+        result.put("data", categoriasActivas);
+        result.put("total", categoriasActivas.size());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

@@ -56,6 +56,10 @@ public class Usuarios implements Serializable {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<ActivosTecnologicos> activosTecnologicos = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToOne(mappedBy = "usuario")
+    private Medicos medico;
+
     public Long getUsuaId() {
         return usuaId;
     }
@@ -150,6 +154,14 @@ public class Usuarios implements Serializable {
 
     public void setActivosTecnologicos(List<ActivosTecnologicos> activosTecnologicos) {
         this.activosTecnologicos = activosTecnologicos;
+    }
+
+    public Medicos getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medicos medico) {
+        this.medico = medico;
     }
 }
 

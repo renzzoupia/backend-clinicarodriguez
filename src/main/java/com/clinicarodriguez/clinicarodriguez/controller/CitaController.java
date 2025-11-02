@@ -81,14 +81,14 @@ public class CitaController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    // Buscar citas por usuario (médico)
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> findByUsuarioId(@PathVariable Long usuarioId) {
+    // Buscar citas por médico
+    @GetMapping("/medico/{medicoId}")
+    public ResponseEntity<?> findByMedicoId(@PathVariable Long medicoId) {
         HashMap<String, Object> result = new HashMap<>();
-        List<Cita> citas = citaService.findByUsuarioId(usuarioId);
+        List<Cita> citas = citaService.findByMedicoId(medicoId);
         
         result.put("success", true);
-        result.put("message", "Citas del usuario");
+        result.put("message", "Citas del médico");
         result.put("data", citas);
         result.put("total", citas.size());
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -108,17 +108,17 @@ public class CitaController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    // Buscar citas por usuario y fecha
-    @GetMapping("/usuario/{usuarioId}/fecha/{fecha}")
-    public ResponseEntity<?> findByUsuarioAndFecha(
-            @PathVariable Long usuarioId,
+    // Buscar citas por médico y fecha
+    @GetMapping("/medico/{medicoId}/fecha/{fecha}")
+    public ResponseEntity<?> findByMedicoAndFecha(
+            @PathVariable Long medicoId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         HashMap<String, Object> result = new HashMap<>();
-        List<Cita> citas = citaService.findByUsuarioIdAndFecha(usuarioId, fecha);
-        long count = citaService.countByUsuarioAndFecha(usuarioId, fecha);
+        List<Cita> citas = citaService.findByMedicoIdAndFecha(medicoId, fecha);
+        long count = citaService.countByMedicoAndFecha(medicoId, fecha);
         
         result.put("success", true);
-        result.put("message", "Citas del usuario en la fecha: " + fecha);
+        result.put("message", "Citas del médico en la fecha: " + fecha);
         result.put("data", citas);
         result.put("total", count);
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -157,9 +157,9 @@ public class CitaController {
         
         try {
             // Validaciones básicas
-            if (cita.getPaciente() == null || cita.getUsuario() == null || cita.getMedico() == null) {
+            if (cita.getPaciente() == null || cita.getMedico() == null) {
                 result.put("success", false);
-                result.put("message", "Paciente, Usuario y Médico son requeridos");
+                result.put("message", "Paciente y Médico son requeridos");
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
             
@@ -197,7 +197,6 @@ public class CitaController {
             }
 
             // Actualizar campos
-            citaExistente.setUsuario(cita.getUsuario());
             citaExistente.setPaciente(cita.getPaciente());
             citaExistente.setMedico(cita.getMedico());
             citaExistente.setCitaFecha(cita.getCitaFecha());

@@ -1,7 +1,7 @@
 package com.clinicarodriguez.clinicarodriguez.controller;
 
-import com.clinicarodriguez.clinicarodriguez.model.DiaUsuario;
-import com.clinicarodriguez.clinicarodriguez.service.DiaUsuarioService;
+import com.clinicarodriguez.clinicarodriguez.model.DiasMedico;
+import com.clinicarodriguez.clinicarodriguez.service.DiasMedicoService;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,30 +18,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = {"http://localhost"})
 @RestController
-@RequestMapping("/api/dia-usuario")
-public class DiaUsuarioController {
+@RequestMapping("/api/dias-medico")
+public class DiasMedicoController {
     
     @Autowired
-    private DiaUsuarioService diaUsuarioService;
+    private DiasMedicoService diasMedicoService;
     
     @GetMapping()
     public ResponseEntity<?> findAll() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
-        result.put("message", "Lista de Disponibilidad de Usuarios");
-        result.put("data", diaUsuarioService.findAll());
+        result.put("message", "Lista de Disponibilidad de Médicos");
+        result.put("data", diasMedicoService.findAll());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<?> findById(@PathVariable Long id) {
         HashMap<String, Object> result = new HashMap<>();
-        DiaUsuario diaUsuario = diaUsuarioService.findById(id);
+        DiasMedico diasMedico = diasMedicoService.findById(id);
 
-        if (diaUsuario != null) {
+        if (diasMedico != null) {
             result.put("success", true);
             result.put("message", "Disponibilidad encontrada");
-            result.put("data", diaUsuario);
+            result.put("data", diasMedico);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
             result.put("success", false);
@@ -50,30 +50,30 @@ public class DiaUsuarioController {
         }
     }
     
-    @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> findByUsuarioId(@PathVariable Long usuarioId) {
+    @GetMapping("/medico/{medicoId}")
+    public ResponseEntity<?> findByMedicoId(@PathVariable Long medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
-        result.put("message", "Disponibilidad del usuario");
-        result.put("data", diaUsuarioService.findByUsuarioId(usuarioId));
+        result.put("message", "Disponibilidad del médico");
+        result.put("data", diasMedicoService.findByMedicoId(medicoId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    @GetMapping("/usuario/{usuarioId}/activos")
-    public ResponseEntity<?> findByUsuarioIdActivos(@PathVariable Long usuarioId) {
+    @GetMapping("/medico/{medicoId}/activos")
+    public ResponseEntity<?> findByMedicoIdActivos(@PathVariable Long medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
-        result.put("message", "Disponibilidad activa del usuario");
-        result.put("data", diaUsuarioService.findByUsuarioIdAndEstadoActivo(usuarioId));
+        result.put("message", "Disponibilidad activa del médico");
+        result.put("data", diasMedicoService.findByMedicoIdAndEstadoActivo(medicoId));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody DiaUsuario diaUsuario) {
+    public ResponseEntity<?> save(@RequestBody DiasMedico diasMedico) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
-            DiaUsuario saved = diaUsuarioService.save(diaUsuario);
+            DiasMedico saved = diasMedicoService.save(diasMedico);
             result.put("success", true);
             result.put("message", "Disponibilidad registrada correctamente");
             result.put("data", saved);
@@ -86,24 +86,24 @@ public class DiaUsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DiaUsuario diaUsuario) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DiasMedico diasMedico) {
         HashMap<String, Object> result = new HashMap<>();
         
-        DiaUsuario existing = diaUsuarioService.findById(id);
+        DiasMedico existing = diasMedicoService.findById(id);
         if (existing == null) {
             result.put("success", false);
             result.put("message", "No existe disponibilidad con Id: " + id);
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
 
-        existing.setUsuario(diaUsuario.getUsuario());
-        existing.setDia(diaUsuario.getDia());
-        existing.setDiusEstado(diaUsuario.getDiusEstado());
-        existing.setDiusHoraInicio(diaUsuario.getDiusHoraInicio());
-        existing.setDiusHoraFin(diaUsuario.getDiusHoraFin());
-        existing.setDiusDuracion(diaUsuario.getDiusDuracion());
+        existing.setMedico(diasMedico.getMedico());
+        existing.setDia(diasMedico.getDia());
+        existing.setDimeEstado(diasMedico.getDimeEstado());
+        existing.setDimeHoraInicio(diasMedico.getDimeHoraInicio());
+        existing.setDimeHoraFin(diasMedico.getDimeHoraFin());
+        existing.setDimeDuracion(diasMedico.getDimeDuracion());
         
-        DiaUsuario updated = diaUsuarioService.save(existing);
+        DiasMedico updated = diasMedicoService.save(existing);
         result.put("success", true);
         result.put("message", "Disponibilidad actualizada correctamente");
         result.put("data", updated);
@@ -113,15 +113,15 @@ public class DiaUsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         HashMap<String, Object> result = new HashMap<>();
-        DiaUsuario diaUsuario = diaUsuarioService.findById(id);
+        DiasMedico diasMedico = diasMedicoService.findById(id);
 
-        if (diaUsuario == null) {
+        if (diasMedico == null) {
             result.put("success", false);
             result.put("message", "No existe disponibilidad con id: " + id);
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
 
-        diaUsuarioService.deleteById(id);
+        diasMedicoService.deleteById(id);
         result.put("success", true);
         result.put("message", "Disponibilidad eliminada correctamente");
         return new ResponseEntity<>(result, HttpStatus.OK);

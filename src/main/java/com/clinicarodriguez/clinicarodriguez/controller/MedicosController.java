@@ -5,10 +5,14 @@
 package com.clinicarodriguez.clinicarodriguez.controller;
 
 import com.clinicarodriguez.clinicarodriguez.model.Medicos;
+import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO.EspecialidadSimpleDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO.UsuarioSimpleDTO;
 import com.clinicarodriguez.clinicarodriguez.service.FileStorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,20 +46,54 @@ public class MedicosController {
     @GetMapping()
     public ResponseEntity<?> findAll() {
         HashMap<String, Object> result = new HashMap<>();
+        
+        // Obtener todos los médicos
+        List<Medicos> medicos = medicoRepository.findAll();
+        
+        // Convertir a DTO con especialidades
+        List<MedicoConEspecialidadesDTO> medicosDTO = medicos.stream()
+            .map(this::convertirADTO)
+            .collect(Collectors.toList());
+        
         result.put("success", true);
-        result.put("message", "Lista de Pacientes");
-        result.put("data", medicoRepository.findAll());
+        result.put("message", "Lista de Médicos");
+        result.put("data", medicosDTO);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Medicos> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        HashMap<String, Object> result = new HashMap<>();
         Optional<Medicos> medico = medicoRepository.findById(id);
 
         if (medico.isPresent()) {
-            return ResponseEntity.ok(medico.get());
+            MedicoConEspecialidadesDTO medicoDTO = convertirADTO(medico.get());
+            result.put("success", true);
+            result.put("message", "Médico encontrado");
+            result.put("data", medicoDTO);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            result.put("success", false);
+            result.put("message", "Médico no encontrado");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<?> findByUsuarioId(@PathVariable Long usuarioId) {
+        HashMap<String, Object> result = new HashMap<>();
+        Optional<Medicos> medico = medicoRepository.findByUsuarioId(usuarioId);
+
+        if (medico.isPresent()) {
+            MedicoConEspecialidadesDTO medicoDTO = convertirADTO(medico.get());
+            result.put("success", true);
+            result.put("message", "Médico encontrado por usuario");
+            result.put("data", medicoDTO);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("success", false);
+            result.put("message", "No existe médico asociado al usuario con id: " + usuarioId);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -159,11 +197,9 @@ public class MedicosController {
             Medicos existingMedico = data.get();
             existingMedico.setMediNombre(medico.getMediNombre());
             existingMedico.setMediApellido(medico.getMediApellido());
-            existingMedico.setMediDni(medico.getMediDni());
-            existingMedico.setMediEmail(medico.getMediEmail());
-            existingMedico.setMediTelefono(medico.getMediTelefono());
             existingMedico.setMediFotoUrl(medico.getMediFotoUrl());
             existingMedico.setMediEstado(medico.getMediEstado());
+            existingMedico.setUsuario(medico.getUsuario());
             medicoRepository.save(existingMedico);
 
             result.put("success", true);
@@ -243,5 +279,40 @@ public class MedicosController {
             result.put("message", "Error al subir el archivo: " + ex.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    /**
+     * Método auxiliar para convertir un Medico a DTO con especialidades
+     */
+    private MedicoConEspecialidadesDTO convertirADTO(Medicos medico) {
+        List<EspecialidadSimpleDTO> especialidades = medico.getMedicosEspecialidades()
+            .stream()
+            .map(me -> new EspecialidadSimpleDTO(
+                me.getEspecialidad().getEspeId(),
+                me.getEspecialidad().getEspeNombre(),
+                me.getEspecialidad().getEspeDescripcion()
+            ))
+            .collect(Collectors.toList());
+        
+        // Convertir usuario si existe
+        UsuarioSimpleDTO usuarioDTO = null;
+        if (medico.getUsuario() != null) {
+            usuarioDTO = new UsuarioSimpleDTO(
+                medico.getUsuario().getUsuaId(),
+                medico.getUsuario().getUsuaUsername(),
+                medico.getUsuario().getUsuaNombrecompleto(),
+                medico.getUsuario().getUsuaEmail()
+            );
+        }
+        
+        return new MedicoConEspecialidadesDTO(
+            medico.getMediId(),
+            medico.getMediNombre(),
+            medico.getMediApellido(),
+            medico.getMediFotoUrl(),
+            medico.getMediEstado(),
+            usuarioDTO,
+            especialidades
+        );
     }
 }

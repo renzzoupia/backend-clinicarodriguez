@@ -15,10 +15,6 @@ public class Cita implements Serializable {
     private Long citaId;
 
     @ManyToOne
-    @JoinColumn(name = "cita_usua_id", nullable = false)
-    private Usuarios usuario;
-
-    @ManyToOne
     @JoinColumn(name = "cita_paci_id", nullable = false)
     private Paciente paciente;
 
@@ -50,14 +46,6 @@ public class Cita implements Serializable {
 
     public void setCitaId(Long citaId) {
         this.citaId = citaId;
-    }
-
-    public Usuarios getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
     }
 
     public Paciente getPaciente() {
