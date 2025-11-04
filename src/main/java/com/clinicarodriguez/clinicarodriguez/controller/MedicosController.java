@@ -108,9 +108,10 @@ public class MedicosController {
             result.put("message", "No existe médico con id: " + id);
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         } else {
-            medicoRepository.deleteById(id);
+            //medicoRepository.deleteById(id);
+            medicoRepository.delete(data.get()); 
             result.put("success", true);
-            result.put("message", "Médico eliminado correctamente");
+            result.put("message", "Médico y usuario eliminados correctamente");
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }

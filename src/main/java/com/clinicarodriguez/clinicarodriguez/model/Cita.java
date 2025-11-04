@@ -28,6 +28,9 @@ public class Cita implements Serializable {
     @Column(name = "cita_hora")
     private LocalTime citaHora;
 
+    @Column(name = "cita_hora_fin")
+    private LocalTime citaHoraFin;
+
     @Column(name = "cita_tipo", length = 100)
     private String citaTipo;
 
@@ -78,6 +81,14 @@ public class Cita implements Serializable {
 
     public void setCitaHora(LocalTime citaHora) {
         this.citaHora = citaHora;
+    }
+
+    public LocalTime getCitaHoraFin() {
+        return citaHoraFin;
+    }
+
+    public void setCitaHoraFin(LocalTime citaHoraFin) {
+        this.citaHoraFin = citaHoraFin;
     }
 
     public String getCitaTipo() {

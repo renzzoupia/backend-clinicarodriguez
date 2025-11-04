@@ -33,7 +33,7 @@ public class Medicos implements Serializable{
     @Column(name = "medi_estado")
     private String mediEstado;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "medi_usua_id", unique = true)
     private Usuarios usuario;
 

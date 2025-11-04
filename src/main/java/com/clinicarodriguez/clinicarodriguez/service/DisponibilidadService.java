@@ -1,6 +1,8 @@
 package com.clinicarodriguez.clinicarodriguez.service;
 
 import com.clinicarodriguez.clinicarodriguez.dto.DisponibilidadEspecialidadDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.SlotsDisponiblesDTO;
+import java.time.LocalDate;
 
 public interface DisponibilidadService {
     
@@ -10,4 +12,13 @@ public interface DisponibilidadService {
      * @return DTO con médicos y sus horarios disponibles
      */
     DisponibilidadEspecialidadDTO obtenerDisponibilidadPorEspecialidad(Long especialidadId);
+    
+    /**
+     * Obtiene los slots disponibles de un médico en una fecha específica
+     * Muestra qué horarios están disponibles y cuáles están ocupados
+     * @param medicoId ID del médico
+     * @param fecha Fecha para consultar disponibilidad
+     * @return DTO con todos los slots y su disponibilidad
+     */
+    SlotsDisponiblesDTO obtenerSlotsDisponibles(Long medicoId, LocalDate fecha);
 }

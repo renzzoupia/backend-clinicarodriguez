@@ -1,5 +1,6 @@
 package com.clinicarodriguez.clinicarodriguez.dto;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class DisponibilidadEspecialidadDTO {
         private String medicoFotoUrl;
         private String medicoEstado;
         private List<HorarioDTO> horarios;
+        private List<SlotOcupadoDTO> slotsOcupados; // Slots ya reservados
         
         public MedicoDisponibilidadDTO() {
         }
@@ -75,6 +77,7 @@ public class DisponibilidadEspecialidadDTO {
             this.medicoFotoUrl = medicoFotoUrl;
             this.medicoEstado = medicoEstado;
             this.horarios = horarios;
+            this.slotsOcupados = null; // Se asignará después
         }
 
         public Long getMedicoId() {
@@ -123,6 +126,14 @@ public class DisponibilidadEspecialidadDTO {
 
         public void setHorarios(List<HorarioDTO> horarios) {
             this.horarios = horarios;
+        }
+
+        public List<SlotOcupadoDTO> getSlotsOcupados() {
+            return slotsOcupados;
+        }
+
+        public void setSlotsOcupados(List<SlotOcupadoDTO> slotsOcupados) {
+            this.slotsOcupados = slotsOcupados;
         }
     }
     
@@ -194,6 +205,56 @@ public class DisponibilidadEspecialidadDTO {
 
         public void setEstado(Integer estado) {
             this.estado = estado;
+        }
+    }
+    
+    // Clase interna para representar slot ocupado
+    public static class SlotOcupadoDTO {
+        private LocalDate fecha;
+        private LocalTime horaInicio;
+        private LocalTime horaFin;
+        private Long citaId;
+        
+        public SlotOcupadoDTO() {
+        }
+        
+        public SlotOcupadoDTO(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Long citaId) {
+            this.fecha = fecha;
+            this.horaInicio = horaInicio;
+            this.horaFin = horaFin;
+            this.citaId = citaId;
+        }
+
+        public LocalDate getFecha() {
+            return fecha;
+        }
+
+        public void setFecha(LocalDate fecha) {
+            this.fecha = fecha;
+        }
+
+        public LocalTime getHoraInicio() {
+            return horaInicio;
+        }
+
+        public void setHoraInicio(LocalTime horaInicio) {
+            this.horaInicio = horaInicio;
+        }
+
+        public LocalTime getHoraFin() {
+            return horaFin;
+        }
+
+        public void setHoraFin(LocalTime horaFin) {
+            this.horaFin = horaFin;
+        }
+
+        public Long getCitaId() {
+            return citaId;
+        }
+
+        public void setCitaId(Long citaId) {
+            this.citaId = citaId;
         }
     }
 }
