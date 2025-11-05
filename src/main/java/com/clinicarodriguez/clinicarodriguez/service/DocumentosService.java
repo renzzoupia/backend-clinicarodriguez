@@ -19,19 +19,14 @@ public interface DocumentosService {
     void eliminar(Long id);
     
     // Métodos de búsqueda especializados
-    List<Documentos> buscarPorPaciente(Long paciId);
-    
     List<Documentos> buscarPorHistoria(Long histId);
-    
-    List<Documentos> buscarPorPacienteYEstado(Long paciId, Boolean estado);
-    
-    List<Documentos> buscarVisiblesParaPaciente(Long paciId, Boolean visiblePaciente, Boolean estado);
     
     List<Documentos> buscarConfidenciales(Boolean confidencial, Boolean estado);
     
     List<Documentos> buscarPorTipo(String tipo);
     
-    List<Documentos> buscarPorTipoYPaciente(String tipo, Long paciId);
-    
     List<Documentos> buscarPorEstado(Boolean estado);
+    
+    // Buscar documentos visibles para paciente por DNI (excluye confidenciales)
+    List<Documentos> buscarPorPacienteDni(String dni);
 }

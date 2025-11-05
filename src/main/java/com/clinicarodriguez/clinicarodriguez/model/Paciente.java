@@ -59,10 +59,6 @@ public class Paciente implements Serializable {
     @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
     private Set<Historias> historias = new HashSet<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "paciente", cascade = CascadeType.ALL)
-    private Set<Documentos> documentos = new HashSet<>();
-
     public Long getPaciId() {
         return paciId;
     }
@@ -173,14 +169,6 @@ public class Paciente implements Serializable {
 
     public void setHistorias(Set<Historias> historias) {
         this.historias = historias;
-    }
-
-    public Set<Documentos> getDocumentos() {
-        return documentos;
-    }
-
-    public void setDocumentos(Set<Documentos> documentos) {
-        this.documentos = documentos;
     }
 
     // Enums

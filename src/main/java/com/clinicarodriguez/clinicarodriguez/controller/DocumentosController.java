@@ -1,11 +1,9 @@
 package com.clinicarodriguez.clinicarodriguez.controller;
 
 import com.clinicarodriguez.clinicarodriguez.model.Documentos;
-import com.clinicarodriguez.clinicarodriguez.model.Paciente;
 import com.clinicarodriguez.clinicarodriguez.model.Historias;
 import com.clinicarodriguez.clinicarodriguez.service.DocumentosService;
 import com.clinicarodriguez.clinicarodriguez.service.FileStorageService;
-import com.clinicarodriguez.clinicarodriguez.repository.PacienteRepository;
 import com.clinicarodriguez.clinicarodriguez.repository.HistoriasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,127 +29,169 @@ public class DocumentosController {
     private FileStorageService fileStorageService;
     
     @Autowired
-    private PacienteRepository pacienteRepository;
-    
-    @Autowired
     private HistoriasRepository historiasRepository;
 
     // GET: Listar todos los documentos
     @GetMapping
-    public ResponseEntity<List<Documentos>> listarTodos() {
+    public ResponseEntity<?> listarTodos() {
+        HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.listarTodos();
-        return ResponseEntity.ok(documentos);
+        
+        result.put("success", true);
+        result.put("message", "Lista de documentos");
+        result.put("data", documentos);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // GET: Buscar documento por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Documentos> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        HashMap<String, Object> result = new HashMap<>();
         Optional<Documentos> documento = documentosService.buscarPorId(id);
-        return documento.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // GET: Buscar documentos por paciente
-    @GetMapping("/paciente/{paciId}")
-    public ResponseEntity<List<Documentos>> buscarPorPaciente(@PathVariable Long paciId) {
-        List<Documentos> documentos = documentosService.buscarPorPaciente(paciId);
-        return ResponseEntity.ok(documentos);
+        
+        if (documento.isPresent()) {
+            result.put("success", true);
+            result.put("message", "Documento encontrado");
+            result.put("data", documento.get());
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            result.put("success", false);
+            result.put("message", "Documento no encontrado");
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+        }
     }
 
     // GET: Buscar documentos por historia
     @GetMapping("/historia/{histId}")
-    public ResponseEntity<List<Documentos>> buscarPorHistoria(@PathVariable Long histId) {
+    public ResponseEntity<?> buscarPorHistoria(@PathVariable Long histId) {
+        HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.buscarPorHistoria(histId);
-        return ResponseEntity.ok(documentos);
-    }
-
-    // GET: Buscar documentos por paciente y estado
-    @GetMapping("/paciente/{paciId}/estado/{estado}")
-    public ResponseEntity<List<Documentos>> buscarPorPacienteYEstado(
-            @PathVariable Long paciId,
-            @PathVariable Boolean estado) {
-        List<Documentos> documentos = documentosService.buscarPorPacienteYEstado(paciId, estado);
-        return ResponseEntity.ok(documentos);
-    }
-
-    // GET: Buscar documentos visibles para paciente
-    @GetMapping("/paciente/{paciId}/visibles")
-    public ResponseEntity<List<Documentos>> buscarVisiblesParaPaciente(
-            @PathVariable Long paciId,
-            @RequestParam(defaultValue = "true") Boolean visiblePaciente,
-            @RequestParam(defaultValue = "true") Boolean estado) {
-        List<Documentos> documentos = documentosService.buscarVisiblesParaPaciente(paciId, visiblePaciente, estado);
-        return ResponseEntity.ok(documentos);
+        
+        result.put("success", true);
+        result.put("message", "Documentos de la historia");
+        result.put("data", documentos);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // GET: Buscar documentos confidenciales
     @GetMapping("/confidenciales")
-    public ResponseEntity<List<Documentos>> buscarConfidenciales(
+    public ResponseEntity<?> buscarConfidenciales(
             @RequestParam(defaultValue = "true") Boolean confidencial,
             @RequestParam(defaultValue = "true") Boolean estado) {
+        HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.buscarConfidenciales(confidencial, estado);
-        return ResponseEntity.ok(documentos);
+        
+        result.put("success", true);
+        result.put("message", "Documentos confidenciales");
+        result.put("data", documentos);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // GET: Buscar documentos por tipo
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<List<Documentos>> buscarPorTipo(@PathVariable String tipo) {
+    public ResponseEntity<?> buscarPorTipo(@PathVariable String tipo) {
+        HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.buscarPorTipo(tipo);
-        return ResponseEntity.ok(documentos);
-    }
-
-    // GET: Buscar documentos por tipo y paciente
-    @GetMapping("/tipo/{tipo}/paciente/{paciId}")
-    public ResponseEntity<List<Documentos>> buscarPorTipoYPaciente(
-            @PathVariable String tipo,
-            @PathVariable Long paciId) {
-        List<Documentos> documentos = documentosService.buscarPorTipoYPaciente(tipo, paciId);
-        return ResponseEntity.ok(documentos);
+        
+        result.put("success", true);
+        result.put("message", "Documentos por tipo");
+        result.put("data", documentos);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // GET: Buscar documentos por estado
     @GetMapping("/estado/{estado}")
-    public ResponseEntity<List<Documentos>> buscarPorEstado(@PathVariable Boolean estado) {
+    public ResponseEntity<?> buscarPorEstado(@PathVariable Boolean estado) {
+        HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.buscarPorEstado(estado);
-        return ResponseEntity.ok(documentos);
+        
+        result.put("success", true);
+        result.put("message", "Documentos por estado");
+        result.put("data", documentos);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    /**
+     * GET: Buscar documentos visibles para paciente por DNI
+     * Solo retorna documentos donde:
+     * - docuVisiblePaciente = true
+     * - docuConfidencial = false
+     * - docuEstado = true
+     * 
+     * Ejemplo: GET /api/documentos/paciente/dni/12345678
+     */
+    @GetMapping("/paciente/dni/{dni}")
+    public ResponseEntity<?> buscarPorPacienteDni(@PathVariable String dni) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<Documentos> documentos = documentosService.buscarPorPacienteDni(dni);
+        
+        if (documentos.isEmpty()) {
+            result.put("success", true);
+            result.put("message", "No se encontraron documentos para el paciente con DNI: " + dni);
+            result.put("data", documentos);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        
+        result.put("success", true);
+        result.put("message", "Documentos del paciente con DNI: " + dni);
+        result.put("data", documentos);
+        result.put("total", documentos.size());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     // POST: Crear nuevo documento
     @PostMapping
-    public ResponseEntity<Documentos> crear(@RequestBody Documentos documento) {
+    public ResponseEntity<?> crear(@RequestBody Documentos documento) {
+        HashMap<String, Object> result = new HashMap<>();
         Documentos nuevoDocumento = documentosService.guardar(documento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoDocumento);
+        
+        result.put("success", true);
+        result.put("message", "Documento creado correctamente");
+        result.put("data", nuevoDocumento);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     // PUT: Actualizar documento existente
     @PutMapping("/{id}")
-    public ResponseEntity<Documentos> actualizar(
+    public ResponseEntity<?> actualizar(
             @PathVariable Long id,
             @RequestBody Documentos documento) {
+        HashMap<String, Object> result = new HashMap<>();
+        
         try {
             Documentos documentoActualizado = documentosService.actualizar(id, documento);
-            return ResponseEntity.ok(documentoActualizado);
+            result.put("success", true);
+            result.put("message", "Documento actualizado correctamente");
+            result.put("data", documentoActualizado);
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            result.put("success", false);
+            result.put("message", "Documento no encontrado con id: " + id);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
 
     // DELETE: Eliminar documento
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+        HashMap<String, Object> result = new HashMap<>();
+        
         try {
             documentosService.eliminar(id);
-            return ResponseEntity.noContent().build();
+            result.put("success", true);
+            result.put("message", "Documento eliminado correctamente");
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            result.put("success", false);
+            result.put("message", "Documento no encontrado con id: " + id);
+            return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
     }
     
     /**
      * Endpoint para subir un archivo (foto o PDF) y crear el registro de documento
      * @param file - Archivo (imagen o PDF)
-     * @param paciId - ID del paciente (obligatorio)
-     * @param histId - ID de la historia (opcional)
+     * @param histId - ID de la historia (obligatorio)
      * @param nombre - Nombre descriptivo del documento
      * @param tipo - Tipo de documento (ej: "Receta", "Resultado", "Radiografía")
      * @param visiblePaciente - Si el paciente puede ver el documento
@@ -161,8 +201,7 @@ public class DocumentosController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadDocumento(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("paciId") Long paciId,
-            @RequestParam(value = "histId", required = false) Long histId,
+            @RequestParam("histId") Long histId,
             @RequestParam("nombre") String nombre,
             @RequestParam("tipo") String tipo,
             @RequestParam(value = "visiblePaciente", defaultValue = "true") Boolean visiblePaciente,
@@ -186,25 +225,14 @@ public class DocumentosController {
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
         
-        // Validar que el paciente existe
-        Optional<Paciente> paciente = pacienteRepository.findById(paciId);
-        if (paciente.isEmpty()) {
+        // Validar que la historia existe
+        Optional<Historias> historiaOpt = historiasRepository.findById(histId);
+        if (historiaOpt.isEmpty()) {
             result.put("success", false);
-            result.put("message", "No existe paciente con id: " + paciId);
+            result.put("message", "No existe historia con id: " + histId);
             return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
         }
-        
-        // Validar historia si se proporciona
-        Historias historia = null;
-        if (histId != null) {
-            Optional<Historias> historiaOpt = historiasRepository.findById(histId);
-            if (historiaOpt.isEmpty()) {
-                result.put("success", false);
-                result.put("message", "No existe historia con id: " + histId);
-                return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
-            }
-            historia = historiaOpt.get();
-        }
+        Historias historia = historiaOpt.get();
         
         try {
             // Guardar el archivo en la carpeta "documentos"
@@ -218,7 +246,6 @@ public class DocumentosController {
             
             // Crear el registro del documento
             Documentos documento = new Documentos();
-            documento.setPaciente(paciente.get());
             documento.setHistoria(historia);
             documento.setDocuNombre(nombre);
             documento.setDocuTipo(tipo);

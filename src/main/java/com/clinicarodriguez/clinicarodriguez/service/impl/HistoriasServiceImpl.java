@@ -28,7 +28,10 @@ public class HistoriasServiceImpl implements HistoriasService {
     @Transactional
     @Override
     public Historias save(Historias historia) {
-        // Establecer fecha actual si no está definida
+        // Establecer fecha de registro si no está definida
+        if (historia.getHistRegistrofecha() == null) {
+            historia.setHistRegistrofecha(LocalDate.now());
+        }
         
         return historiasRepository.save(historia);
     }

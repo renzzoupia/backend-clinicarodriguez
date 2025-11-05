@@ -3,6 +3,7 @@ package com.clinicarodriguez.clinicarodriguez.model;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,6 +28,9 @@ public class Historias implements Serializable {
 
     @Column(name = "hist_fecha")
     private LocalDateTime histFecha;
+
+    @Column(name = "hist_registrofecha")
+    private LocalDate histRegistrofecha;
 
     @Column(name = "hist_talle", precision = 10, scale = 2)
     private BigDecimal histTalle;
@@ -81,6 +85,14 @@ public class Historias implements Serializable {
 
     public void setHistFecha(LocalDateTime histFecha) {
         this.histFecha = histFecha;
+    }
+
+    public LocalDate getHistRegistrofecha() {
+        return histRegistrofecha;
+    }
+
+    public void setHistRegistrofecha(LocalDate histRegistrofecha) {
+        this.histRegistrofecha = histRegistrofecha;
     }
 
     public BigDecimal getHistTalle() {

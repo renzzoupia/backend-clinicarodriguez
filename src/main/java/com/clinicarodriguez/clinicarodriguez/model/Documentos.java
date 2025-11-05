@@ -14,11 +14,7 @@ public class Documentos implements Serializable {
     private Long docuId;
 
     @ManyToOne
-    @JoinColumn(name = "docu_paci_id", nullable = false)
-    private Paciente paciente;
-
-    @ManyToOne
-    @JoinColumn(name = "docu_hist_id", nullable = true)
+    @JoinColumn(name = "docu_hist_id", nullable = false)
     private Historias historia;
 
     @Column(name = "docu_nombre", length = 255)
@@ -48,14 +44,6 @@ public class Documentos implements Serializable {
 
     public void setDocuId(Long docuId) {
         this.docuId = docuId;
-    }
-
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
     }
 
     public Historias getHistoria() {

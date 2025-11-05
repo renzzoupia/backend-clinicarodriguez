@@ -49,23 +49,8 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public List<Documentos> buscarPorPaciente(Long paciId) {
-        return documentosRepository.findByPacientePaciId(paciId);
-    }
-
-    @Override
     public List<Documentos> buscarPorHistoria(Long histId) {
         return documentosRepository.findByHistoriaHistId(histId);
-    }
-
-    @Override
-    public List<Documentos> buscarPorPacienteYEstado(Long paciId, Boolean estado) {
-        return documentosRepository.findByPacientePaciIdAndDocuEstado(paciId, estado);
-    }
-
-    @Override
-    public List<Documentos> buscarVisiblesParaPaciente(Long paciId, Boolean visiblePaciente, Boolean estado) {
-        return documentosRepository.findByPacientePaciIdAndDocuVisiblePacienteAndDocuEstado(paciId, visiblePaciente, estado);
     }
 
     @Override
@@ -79,12 +64,12 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public List<Documentos> buscarPorTipoYPaciente(String tipo, Long paciId) {
-        return documentosRepository.findByDocuTipoAndPacientePaciId(tipo, paciId);
+    public List<Documentos> buscarPorEstado(Boolean estado) {
+        return documentosRepository.findByDocuEstado(estado);
     }
 
     @Override
-    public List<Documentos> buscarPorEstado(Boolean estado) {
-        return documentosRepository.findByDocuEstado(estado);
+    public List<Documentos> buscarPorPacienteDni(String dni) {
+        return documentosRepository.findByPacienteDniVisibles(dni);
     }
 }
