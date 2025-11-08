@@ -42,6 +42,10 @@ public class ActivosTecnologicos implements Serializable {
     private String acteUbicacion;
 
     @ManyToOne
+    @JoinColumn(name = "acte_area_id")
+    private Areas area;
+
+    @ManyToOne
     @JoinColumn(name = "acte_usua_id")
     private Usuarios usuario;
 
@@ -132,6 +136,14 @@ public class ActivosTecnologicos implements Serializable {
 
     public void setActeUbicacion(String acteUbicacion) {
         this.acteUbicacion = acteUbicacion;
+    }
+
+    public Areas getArea() {
+        return area;
+    }
+
+    public void setArea(Areas area) {
+        this.area = area;
     }
 
     public Usuarios getUsuario() {

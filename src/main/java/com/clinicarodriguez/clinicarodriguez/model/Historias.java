@@ -1,10 +1,12 @@
 package com.clinicarodriguez.clinicarodriguez.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "historias")
@@ -46,6 +48,14 @@ public class Historias implements Serializable {
 
     @Column(name = "hist_estado")
     private Integer histEstado;
+
+    @OneToMany(mappedBy = "historia")
+    @JsonManagedReference
+    private List<Triaje> triajes;
+
+    @OneToMany(mappedBy = "historia")
+    @JsonManagedReference
+    private List<EpisodiosClinicos> episodiosClinicos;
 
     public Long getHistId() {
         return histId;
@@ -133,5 +143,20 @@ public class Historias implements Serializable {
 
     public void setHistEstado(Integer histEstado) {
         this.histEstado = histEstado;
+    }
+
+    public List<Triaje> getTriajes() {
+        return triajes;
+    }
+    public void setTriajes(List<Triaje> triajes) {
+        this.triajes = triajes;
+    }
+
+    public List<EpisodiosClinicos> getEpisodiosClinicos() {
+        return episodiosClinicos;
+    }
+
+    public void setEpisodiosClinicos(List<EpisodiosClinicos> episodiosClinicos) {
+        this.episodiosClinicos = episodiosClinicos;
     }
 }
