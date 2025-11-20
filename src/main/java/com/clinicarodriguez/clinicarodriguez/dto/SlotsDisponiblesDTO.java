@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class SlotsDisponiblesDTO {
     
-    private Long medicoId;
+    private Integer medicoId;
     private String medicoNombre;
     private LocalDate fecha;
     private ConfiguracionHorarioDTO configuracion;
@@ -60,7 +60,7 @@ public class SlotsDisponiblesDTO {
     public SlotsDisponiblesDTO() {
     }
     
-    public SlotsDisponiblesDTO(Long medicoId, String medicoNombre, LocalDate fecha, 
+    public SlotsDisponiblesDTO(Integer medicoId, String medicoNombre, LocalDate fecha, 
                                ConfiguracionHorarioDTO configuracion, List<SlotHorarioDTO> slots) {
         this.medicoId = medicoId;
         this.medicoNombre = medicoNombre;
@@ -70,11 +70,11 @@ public class SlotsDisponiblesDTO {
     }
 
     // Getters y Setters
-    public Long getMedicoId() {
+    public Integer getMedicoId() {
         return medicoId;
     }
 
-    public void setMedicoId(Long medicoId) {
+    public void setMedicoId(Integer medicoId) {
         this.medicoId = medicoId;
     }
 

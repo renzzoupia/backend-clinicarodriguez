@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DisponibilidadEspecialidadDTO {
     
-    private Long especialidadId;
+    private Integer especialidadId;
     private String especialidadNombre;
     private String especialidadDescripcion;
     private List<MedicoDisponibilidadDTO> medicosDisponibles;
@@ -14,7 +14,7 @@ public class DisponibilidadEspecialidadDTO {
     public DisponibilidadEspecialidadDTO() {
     }
     
-    public DisponibilidadEspecialidadDTO(Long especialidadId, String especialidadNombre, 
+    public DisponibilidadEspecialidadDTO(Integer especialidadId, String especialidadNombre, 
                                          String especialidadDescripcion, 
                                          List<MedicoDisponibilidadDTO> medicosDisponibles) {
         this.especialidadId = especialidadId;
@@ -24,11 +24,11 @@ public class DisponibilidadEspecialidadDTO {
     }
 
     // Getters y Setters
-    public Long getEspecialidadId() {
+    public Integer getEspecialidadId() {
         return especialidadId;
     }
 
-    public void setEspecialidadId(Long especialidadId) {
+    public void setEspecialidadId(Integer especialidadId) {
         this.especialidadId = especialidadId;
     }
 
@@ -58,7 +58,7 @@ public class DisponibilidadEspecialidadDTO {
     
     // Clase interna para representar médico con disponibilidad
     public static class MedicoDisponibilidadDTO {
-        private Long medicoId;
+        private Integer medicoId;
         private String medicoNombre;
         private String medicoApellido;
         private String medicoFotoUrl;
@@ -69,7 +69,7 @@ public class DisponibilidadEspecialidadDTO {
         public MedicoDisponibilidadDTO() {
         }
         
-        public MedicoDisponibilidadDTO(Long medicoId, String medicoNombre, String medicoApellido, String medicoFotoUrl, 
+        public MedicoDisponibilidadDTO(Integer medicoId, String medicoNombre, String medicoApellido, String medicoFotoUrl, 
                                        String medicoEstado, List<HorarioDTO> horarios) {
             this.medicoId = medicoId;
             this.medicoNombre = medicoNombre;
@@ -80,11 +80,11 @@ public class DisponibilidadEspecialidadDTO {
             this.slotsOcupados = null; // Se asignará después
         }
 
-        public Long getMedicoId() {
+        public Integer getMedicoId() {
             return medicoId;
         }
 
-        public void setMedicoId(Long medicoId) {
+        public void setMedicoId(Integer medicoId) {
             this.medicoId = medicoId;
         }
 
@@ -213,12 +213,12 @@ public class DisponibilidadEspecialidadDTO {
         private LocalDate fecha;
         private LocalTime horaInicio;
         private LocalTime horaFin;
-        private Long citaId;
+        private Integer citaId;
         
         public SlotOcupadoDTO() {
         }
         
-        public SlotOcupadoDTO(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Long citaId) {
+        public SlotOcupadoDTO(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Integer citaId) {
             this.fecha = fecha;
             this.horaInicio = horaInicio;
             this.horaFin = horaFin;
@@ -249,11 +249,11 @@ public class DisponibilidadEspecialidadDTO {
             this.horaFin = horaFin;
         }
 
-        public Long getCitaId() {
+        public Integer getCitaId() {
             return citaId;
         }
 
-        public void setCitaId(Long citaId) {
+        public void setCitaId(Integer citaId) {
             this.citaId = citaId;
         }
     }

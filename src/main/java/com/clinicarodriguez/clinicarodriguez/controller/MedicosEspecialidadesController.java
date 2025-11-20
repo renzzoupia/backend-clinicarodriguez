@@ -39,7 +39,7 @@ public class MedicosEspecialidadesController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
         Optional<MedicosEspecialidades> medicosEspecialidades = medicosEspecialidadesRepository.findById(id);
 
         if (medicosEspecialidades.isPresent()) {
@@ -57,7 +57,7 @@ public class MedicosEspecialidadesController {
     }
     
     @GetMapping("/medico/{medicoId}")
-    public ResponseEntity<?> findByMedicoId(@PathVariable Long medicoId) {
+    public ResponseEntity<?> findByMedicoId(@PathVariable Integer medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "Especialidades del médico");
@@ -66,7 +66,7 @@ public class MedicosEspecialidadesController {
     }
     
     @GetMapping("/especialidad/{especialidadId}")
-    public ResponseEntity<?> findByEspecialidadId(@PathVariable Long especialidadId) {
+    public ResponseEntity<?> findByEspecialidadId(@PathVariable Integer especialidadId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "Médicos con la especialidad");
@@ -75,7 +75,7 @@ public class MedicosEspecialidadesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
 
         Optional<MedicosEspecialidades> data = medicosEspecialidadesRepository.findById(id);
@@ -110,11 +110,11 @@ public class MedicosEspecialidadesController {
     }
     
     @PostMapping("/asignar")
-    public ResponseEntity<?> asignarEspecialidadAMedico(@RequestBody Map<String, Long> payload) {
+    public ResponseEntity<?> asignarEspecialidadAMedico(@RequestBody Map<String, Integer> payload) {
         HashMap<String, Object> result = new HashMap<>();
         
-        Long medicoId = payload.get("medicoId");
-        Long especialidadId = payload.get("especialidadId");
+        Integer medicoId = payload.get("medicoId");
+        Integer especialidadId = payload.get("especialidadId");
         
         if (medicoId == null || especialidadId == null) {
             result.put("success", false);

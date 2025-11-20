@@ -7,17 +7,17 @@ public interface DiasMedicoService {
     
     public List<DiasMedico> findAll();
     
-    public DiasMedico findById(Long id);
+    public DiasMedico findById(Integer id);
     
     public DiasMedico save(DiasMedico diasMedico);
     
     public void delete(DiasMedico diasMedico);
     
-    public void deleteById(Long id);
+    public void deleteById(Integer id);
     
-    public List<DiasMedico> findByMedicoId(Long medicoId);
+    public List<DiasMedico> findByMedicoId(Integer medicoId);
     
     public List<DiasMedico> findByDiaId(Integer diaId);
     
-    public List<DiasMedico> findByMedicoIdAndEstadoActivo(Long medicoId);
+    public List<DiasMedico> findByMedicoIdAndEstadoActivo(Integer medicoId);
 }

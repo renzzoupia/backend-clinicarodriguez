@@ -14,20 +14,20 @@ public interface UsuariosRolesService {
     Optional<UsuariosRoles> buscarPorId(Long id);
     
     // Obtener todos los roles de un usuario
-    List<UsuariosRoles> obtenerRolesDeUsuario(Long usuarioId);
+    List<UsuariosRoles> obtenerRolesDeUsuario(Integer usuarioId);
     
     // Obtener todos los usuarios con un rol específico
     List<UsuariosRoles> obtenerUsuariosConRol(Long roleId);
     
     // Asignar un rol a un usuario
-    UsuariosRoles asignarRol(Long usuarioId, Long roleId);
+    UsuariosRoles asignarRol(Integer usuarioId, Integer roleId);
     
     // Quitar un rol de un usuario
-    void quitarRol(Long usuarioId, Long roleId);
+    void quitarRol(Integer usuarioId, Integer roleId);
     
     // Quitar todos los roles de un usuario
-    void quitarTodosLosRolesDeUsuario(Long usuarioId);
+    void quitarTodosLosRolesDeUsuario(Integer usuarioId);
     
     // Verificar si un usuario tiene un rol específico
-    boolean usuarioTieneRol(Long usuarioId, Long roleId);
+    boolean usuarioTieneRol(Integer usuarioId, Integer roleId);
 }

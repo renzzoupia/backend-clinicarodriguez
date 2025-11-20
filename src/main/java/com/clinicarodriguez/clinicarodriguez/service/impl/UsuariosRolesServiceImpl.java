@@ -37,8 +37,8 @@ public class UsuariosRolesServiceImpl implements UsuariosRolesService {
     }
 
     @Override
-    public List<UsuariosRoles> obtenerRolesDeUsuario(Long usuarioId) {
-        return usuariosRolesRepository.findByUsuarioId(usuarioId);
+    public List<UsuariosRoles> obtenerRolesDeUsuario(Integer usuarioId) {
+        return usuariosRolesRepository.findByUsuarioId(Long.valueOf(usuarioId));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class UsuariosRolesServiceImpl implements UsuariosRolesService {
 
     @Override
     @Transactional
-    public UsuariosRoles asignarRol(Long usuarioId, Long roleId) {
+    public UsuariosRoles asignarRol(Integer usuarioId, Integer roleId) {
         // Validar que el usuario existe
         Optional<Usuarios> usuario = usuariosRepository.findById(usuarioId);
         if (usuario.isEmpty()) {
@@ -76,7 +76,7 @@ public class UsuariosRolesServiceImpl implements UsuariosRolesService {
 
     @Override
     @Transactional
-    public void quitarRol(Long usuarioId, Long roleId) {
+    public void quitarRol(Integer usuarioId, Integer roleId) {
         Optional<UsuariosRoles> usuarioRole = usuariosRolesRepository.findByUsuarioIdAndRoleId(usuarioId, roleId);
         
         if (usuarioRole.isEmpty()) {
@@ -88,12 +88,12 @@ public class UsuariosRolesServiceImpl implements UsuariosRolesService {
 
     @Override
     @Transactional
-    public void quitarTodosLosRolesDeUsuario(Long usuarioId) {
-        usuariosRolesRepository.deleteByUsuarioId(usuarioId);
+    public void quitarTodosLosRolesDeUsuario(Integer usuarioId) {
+        usuariosRolesRepository.deleteByUsuarioId(Long.valueOf(usuarioId));
     }
 
     @Override
-    public boolean usuarioTieneRol(Long usuarioId, Long roleId) {
+    public boolean usuarioTieneRol(Integer usuarioId, Integer roleId) {
         return usuariosRolesRepository.existsByUsuarioIdAndRoleId(usuarioId, roleId);
     }
 }

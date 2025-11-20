@@ -23,11 +23,11 @@ public interface UsuariosRolesRepository extends JpaRepository<UsuariosRoles, Lo
     
     // Buscar una relación específica usuario-rol
     @Query("SELECT ur FROM UsuariosRoles ur WHERE ur.usuario.usuaId = :usuarioId AND ur.role.roleId = :roleId")
-    Optional<UsuariosRoles> findByUsuarioIdAndRoleId(@Param("usuarioId") Long usuarioId, @Param("roleId") Long roleId);
+    Optional<UsuariosRoles> findByUsuarioIdAndRoleId(@Param("usuarioId") Integer usuarioId, @Param("roleId") Integer roleId);
     
     // Verificar si un usuario ya tiene un rol específico
     @Query("SELECT COUNT(ur) > 0 FROM UsuariosRoles ur WHERE ur.usuario.usuaId = :usuarioId AND ur.role.roleId = :roleId")
-    boolean existsByUsuarioIdAndRoleId(@Param("usuarioId") Long usuarioId, @Param("roleId") Long roleId);
+    boolean existsByUsuarioIdAndRoleId(@Param("usuarioId") Integer usuarioId, @Param("roleId") Integer roleId);
     
     // Eliminar todos los roles de un usuario
     @Query("DELETE FROM UsuariosRoles ur WHERE ur.usuario.usuaId = :usuarioId")

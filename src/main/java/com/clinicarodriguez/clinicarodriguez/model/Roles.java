@@ -13,7 +13,7 @@ public class Roles implements Serializable {
     @Id
     @Column(name = "role_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    private Integer roleId;
 
     @Column(name = "role_name", unique = true, nullable = false, length = 50)
     private String roleName;
@@ -25,11 +25,11 @@ public class Roles implements Serializable {
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UsuariosRoles> usuariosRoles = new HashSet<>();
 
-    public Long getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 

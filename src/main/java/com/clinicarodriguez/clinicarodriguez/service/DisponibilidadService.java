@@ -11,7 +11,7 @@ public interface DisponibilidadService {
      * @param especialidadId ID de la especialidad
      * @return DTO con médicos y sus horarios disponibles
      */
-    DisponibilidadEspecialidadDTO obtenerDisponibilidadPorEspecialidad(Long especialidadId);
+    DisponibilidadEspecialidadDTO obtenerDisponibilidadPorEspecialidad(Integer especialidadId);
     
     /**
      * Obtiene los slots disponibles de un médico en una fecha específica
@@ -20,5 +20,5 @@ public interface DisponibilidadService {
      * @param fecha Fecha para consultar disponibilidad
      * @return DTO con todos los slots y su disponibilidad
      */
-    SlotsDisponiblesDTO obtenerSlotsDisponibles(Long medicoId, LocalDate fecha);
+    SlotsDisponiblesDTO obtenerSlotsDisponibles(Integer medicoId, LocalDate fecha);
 }

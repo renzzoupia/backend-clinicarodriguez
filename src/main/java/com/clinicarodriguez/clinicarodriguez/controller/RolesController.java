@@ -32,7 +32,7 @@ public class RolesController {
 
     // GET: Buscar rol por ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         Optional<Roles> role = rolesService.buscarPorId(id);
         
@@ -86,7 +86,7 @@ public class RolesController {
 
     // PUT: Actualizar rol
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Roles role) {
+    public ResponseEntity<?> actualizar(@PathVariable Integer id, @RequestBody Roles role) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -104,7 +104,7 @@ public class RolesController {
 
     // DELETE: Eliminar rol
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {

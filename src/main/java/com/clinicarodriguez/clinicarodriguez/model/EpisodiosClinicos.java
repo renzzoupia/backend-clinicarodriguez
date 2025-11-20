@@ -1,9 +1,11 @@
 package com.clinicarodriguez.clinicarodriguez.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "episodios_clinicos")
@@ -39,6 +41,10 @@ public class EpisodiosClinicos implements Serializable {
 
     @Column(name = "epcl_estado")
     private Boolean epclEstado;
+
+    @OneToMany(mappedBy = "episodioClinico", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Receta> recetas;
 
     // Getters and Setters
 
@@ -112,5 +118,13 @@ public class EpisodiosClinicos implements Serializable {
 
     public void setEpclEstado(Boolean epclEstado) {
         this.epclEstado = epclEstado;
+    }
+
+    public List<Receta> getRecetas() {
+        return recetas;
+    }
+
+    public void setRecetas(List<Receta> recetas) {
+        this.recetas = recetas;
     }
 }

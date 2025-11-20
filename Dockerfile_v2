@@ -1,0 +1,6 @@
+# Stage 1: Build the application
+FROM eclipse-temurin:24
+EXPOSE 8080
+
+ADD target/clinicarodriguez-0.0.1-SNAPSHOT.jar target/clinicarodriguez-0.0.1-SNAPSHOT-new.jar
+ENTRYPOINT ["java", "-jar", "/clinicarodriguez-0.0.1-SNAPSHOT-new.jar]

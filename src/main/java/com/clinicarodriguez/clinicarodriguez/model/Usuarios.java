@@ -16,37 +16,23 @@ public class Usuarios implements Serializable {
     @Id
     @Column(name = "usua_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long usuaId;
+    private Integer usuaId;
 
-    @Column(name = "usua_username", unique = true, nullable = false, length = 50)
+    @OneToOne
+    @JoinColumn(name = "usua_pers_id", unique = true, nullable = false)
+    private Personas persona;
+
+    @Column(name = "usua_username", unique = true, nullable = false, length = 60)
     private String usuaUsername;
-
-    @Column(name = "usua_nombrecompleto", nullable = false, length = 150)
-    private String usuaNombrecompleto;
 
     @Column(name = "usua_clave", nullable = false, length = 255)
     private String usuaClave;
 
-    @Column(name = "usua_dni", unique = true, length = 20)
-    private String usuaDni;
-
-    @Column(name = "usua_email", unique = true, nullable = false, length = 100)
-    private String usuaEmail;
-
-    @Column(name = "usua_telefono", length = 20)
-    private String usuaTelefono;
-
-    @Column(name = "usua_foto_url", length = 255)
-    private String usuaFotoUrl;
-
-    //@Column(name = "usua_estado", length = 20)
-    //private String usuaEstado;
-
-    @Column(name = "usua_es_activo")
-    private Boolean usuaEsActivo;
-
     @Column(name = "usua_ultima_sesion")
     private LocalDateTime usuaUltimaSesion;
+
+    @Column(name = "usua_estado", nullable = false)
+    private Boolean usuaEstado;
 
     @JsonIgnore
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,15 +43,25 @@ public class Usuarios implements Serializable {
     private List<ActivosTecnologicos> activosTecnologicos = new ArrayList<>();
 
     @JsonIgnore
-    @OneToOne(mappedBy = "usuario")
-    private Medicos medico;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Historias> historias = new ArrayList<>();
 
-    public Long getUsuaId() {
+    // Getters and Setters
+
+    public Integer getUsuaId() {
         return usuaId;
     }
 
-    public void setUsuaId(Long usuaId) {
+    public void setUsuaId(Integer usuaId) {
         this.usuaId = usuaId;
+    }
+
+    public Personas getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Personas persona) {
+        this.persona = persona;
     }
 
     public String getUsuaUsername() {
@@ -76,14 +72,6 @@ public class Usuarios implements Serializable {
         this.usuaUsername = usuaUsername;
     }
 
-    public String getUsuaNombrecompleto() {
-        return usuaNombrecompleto;
-    }
-
-    public void setUsuaNombrecompleto(String usuaNombrecompleto) {
-        this.usuaNombrecompleto = usuaNombrecompleto;
-    }
-
     public String getUsuaClave() {
         return usuaClave;
     }
@@ -92,52 +80,20 @@ public class Usuarios implements Serializable {
         this.usuaClave = usuaClave;
     }
 
-    public String getUsuaDni() {
-        return usuaDni;
-    }
-
-    public void setUsuaDni(String usuaDni) {
-        this.usuaDni = usuaDni;
-    }
-
-    public String getUsuaEmail() {
-        return usuaEmail;
-    }
-
-    public void setUsuaEmail(String usuaEmail) {
-        this.usuaEmail = usuaEmail;
-    }
-
-    public String getUsuaTelefono() {
-        return usuaTelefono;
-    }
-
-    public void setUsuaTelefono(String usuaTelefono) {
-        this.usuaTelefono = usuaTelefono;
-    }
-
-    public String getUsuaFotoUrl() {
-        return usuaFotoUrl;
-    }
-
-    public void setUsuaFotoUrl(String usuaFotoUrl) {
-        this.usuaFotoUrl = usuaFotoUrl;
-    }
-
-    public Boolean getUsuaEsActivo() {
-        return usuaEsActivo;
-    }
-
-    public void setUsuaEsActivo(Boolean usuaEsActivo) {
-        this.usuaEsActivo = usuaEsActivo;
-    }
-
     public LocalDateTime getUsuaUltimaSesion() {
         return usuaUltimaSesion;
     }
 
     public void setUsuaUltimaSesion(LocalDateTime usuaUltimaSesion) {
         this.usuaUltimaSesion = usuaUltimaSesion;
+    }
+
+    public Boolean getUsuaEstado() {
+        return usuaEstado;
+    }
+
+    public void setUsuaEstado(Boolean usuaEstado) {
+        this.usuaEstado = usuaEstado;
     }
 
     public Set<UsuariosRoles> getUsuariosRoles() {
@@ -156,12 +112,11 @@ public class Usuarios implements Serializable {
         this.activosTecnologicos = activosTecnologicos;
     }
 
-    public Medicos getMedico() {
-        return medico;
+    public List<Historias> getHistorias() {
+        return historias;
     }
 
-    public void setMedico(Medicos medico) {
-        this.medico = medico;
+    public void setHistorias(List<Historias> historias) {
+        this.historias = historias;
     }
 }
-

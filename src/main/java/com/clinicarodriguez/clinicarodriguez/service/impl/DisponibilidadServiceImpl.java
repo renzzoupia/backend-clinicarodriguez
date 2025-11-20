@@ -46,7 +46,7 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
     private CitaRepository citaRepository;
     
     @Override
-    public DisponibilidadEspecialidadDTO obtenerDisponibilidadPorEspecialidad(Long especialidadId) {
+    public DisponibilidadEspecialidadDTO obtenerDisponibilidadPorEspecialidad(Integer especialidadId) {
         
         // 1. Obtener la especialidad
         Especialidades especialidad = especialidadesRepository.findById(especialidadId)
@@ -63,7 +63,7 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
             Medicos medico = me.getMedico();
             
             // Solo incluir médicos activos
-            if (medico.getMediEstado() != null && medico.getMediEstado().equalsIgnoreCase("ACTIVO")) {
+            if (medico.getMediEstado() != null && medico.getMediEstado()) {
                 
                 // Obtener horarios activos del médico
                 List<DiasMedico> diasMedico = diasMedicoRepository.findByMedicoIdAndEstadoActivo(medico.getMediId());
@@ -84,10 +84,10 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
                 if (!horariosDTO.isEmpty()) {
                     MedicoDisponibilidadDTO medicoDTO = new MedicoDisponibilidadDTO(
                         medico.getMediId(),
-                        medico.getMediNombre(),
-                        medico.getMediApellido(),
-                        medico.getMediFotoUrl(),
-                        medico.getMediEstado(),
+                        medico.getPersona().getPersNombrecompleto(),
+                        "",
+                        medico.getPersona().getPersFotoUrl(),
+                        medico.getMediEstado() ? "ACTIVO" : "INACTIVO",
                         horariosDTO
                     );
                     
@@ -126,7 +126,7 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
     }
     
     @Override
-    public SlotsDisponiblesDTO obtenerSlotsDisponibles(Long medicoId, LocalDate fecha) {
+    public SlotsDisponiblesDTO obtenerSlotsDisponibles(Integer medicoId, LocalDate fecha) {
         
         // 1. Verificar que el médico existe
         Medicos medico = medicosRepository.findById(medicoId)
@@ -171,7 +171,7 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
                     );
             
             // Obtener el ID de la cita que ocupa el slot (si existe)
-            Long citaId = null;
+            Integer citaId = null;
             if (ocupado) {
                 citaId = citasActivas.stream()
                         .filter(cita -> 
@@ -196,7 +196,7 @@ public class DisponibilidadServiceImpl implements DisponibilidadService {
         );
         
         // 7. Construir nombre completo del médico
-        String nombreCompleto = medico.getMediNombre() + " " + medico.getMediApellido();
+        String nombreCompleto = medico.getPersona().getPersNombrecompleto();
         
         // 8. Construir y retornar el DTO de respuesta
         return new SlotsDisponiblesDTO(

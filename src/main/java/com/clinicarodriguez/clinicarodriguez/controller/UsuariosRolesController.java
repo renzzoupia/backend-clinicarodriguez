@@ -31,7 +31,7 @@ public class UsuariosRolesController {
 
     // GET: Obtener todos los roles de un usuario
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> obtenerRolesDeUsuario(@PathVariable Long usuarioId) {
+    public ResponseEntity<?> obtenerRolesDeUsuario(@PathVariable Integer usuarioId) {
         HashMap<String, Object> result = new HashMap<>();
         List<UsuariosRoles> roles = usuariosRolesService.obtenerRolesDeUsuario(usuarioId);
         result.put("success", true);
@@ -54,8 +54,8 @@ public class UsuariosRolesController {
     // POST: Asignar un rol a un usuario
     @PostMapping("/asignar")
     public ResponseEntity<?> asignarRol(
-            @RequestParam("usuarioId") Long usuarioId,
-            @RequestParam("roleId") Long roleId) {
+            @RequestParam("usuarioId") Integer usuarioId,
+            @RequestParam("roleId") Integer roleId) {
         
         HashMap<String, Object> result = new HashMap<>();
         
@@ -75,8 +75,8 @@ public class UsuariosRolesController {
     // DELETE: Quitar un rol de un usuario
     @DeleteMapping("/quitar")
     public ResponseEntity<?> quitarRol(
-            @RequestParam("usuarioId") Long usuarioId,
-            @RequestParam("roleId") Long roleId) {
+            @RequestParam("usuarioId") Integer usuarioId,
+            @RequestParam("roleId") Integer roleId) {
         
         HashMap<String, Object> result = new HashMap<>();
         
@@ -94,7 +94,7 @@ public class UsuariosRolesController {
 
     // DELETE: Quitar todos los roles de un usuario
     @DeleteMapping("/usuario/{usuarioId}/todos")
-    public ResponseEntity<?> quitarTodosLosRoles(@PathVariable Long usuarioId) {
+    public ResponseEntity<?> quitarTodosLosRoles(@PathVariable Integer usuarioId) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -112,8 +112,8 @@ public class UsuariosRolesController {
     // GET: Verificar si un usuario tiene un rol específico
     @GetMapping("/verificar")
     public ResponseEntity<?> verificarRol(
-            @RequestParam("usuarioId") Long usuarioId,
-            @RequestParam("roleId") Long roleId) {
+            @RequestParam("usuarioId") Integer usuarioId,
+            @RequestParam("roleId") Integer roleId) {
         
         HashMap<String, Object> result = new HashMap<>();
         boolean tieneRol = usuariosRolesService.usuarioTieneRol(usuarioId, roleId);

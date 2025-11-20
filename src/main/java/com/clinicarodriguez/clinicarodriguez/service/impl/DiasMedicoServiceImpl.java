@@ -20,7 +20,7 @@ public class DiasMedicoServiceImpl implements DiasMedicoService {
     }
 
     @Override
-    public DiasMedico findById(Long id) {
+    public DiasMedico findById(Integer id) {
         return diasMedicoRepository.findById(id).orElse(null);
     }
 
@@ -38,12 +38,12 @@ public class DiasMedicoServiceImpl implements DiasMedicoService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         diasMedicoRepository.deleteById(id);
     }
 
     @Override
-    public List<DiasMedico> findByMedicoId(Long medicoId) {
+    public List<DiasMedico> findByMedicoId(Integer medicoId) {
         return diasMedicoRepository.findByMedicoId(medicoId);
     }
 
@@ -53,7 +53,7 @@ public class DiasMedicoServiceImpl implements DiasMedicoService {
     }
 
     @Override
-    public List<DiasMedico> findByMedicoIdAndEstadoActivo(Long medicoId) {
+    public List<DiasMedico> findByMedicoIdAndEstadoActivo(Integer medicoId) {
         return diasMedicoRepository.findByMedicoIdAndEstadoActivo(medicoId);
     }
 }

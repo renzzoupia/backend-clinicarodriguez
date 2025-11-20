@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DocumentosRepository extends JpaRepository<Documentos, Long> {
+public interface DocumentosRepository extends JpaRepository<Documentos, Integer> {
     
     // Buscar documentos por historia
-    List<Documentos> findByHistoriaHistId(Long histId);
+    List<Documentos> findByHistoriaHistId(Integer histId);
     
     // Buscar documentos confidenciales
     List<Documentos> findByDocuConfidencialAndDocuEstado(Boolean confidencial, Boolean estado);
@@ -25,7 +25,10 @@ public interface DocumentosRepository extends JpaRepository<Documentos, Long> {
     
     // Buscar documentos visibles para paciente por DNI (excluye confidenciales)
     @Query("SELECT d FROM Documentos d " +
-           "WHERE d.historia.paciente.paciDni = :dni " +
+           "JOIN d.historia h " +
+           "JOIN h.paciente p " +
+           "JOIN p.persona per " +
+           "WHERE per.persNroDoc = :dni " +
            "AND d.docuVisiblePaciente = true " +
            "AND d.docuConfidencial = false " +
            "AND d.docuEstado = true " +

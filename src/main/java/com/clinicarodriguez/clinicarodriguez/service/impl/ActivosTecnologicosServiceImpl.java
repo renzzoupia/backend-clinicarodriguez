@@ -105,7 +105,7 @@ public class ActivosTecnologicosServiceImpl implements ActivosTecnologicosServic
     @Override
     @Transactional(readOnly = true)
     public List<ActivosTecnologicos> findByUsuarioId(Integer usuaId) {
-        Optional<Usuarios> usuario = usuariosRepository.findById(Long.valueOf(usuaId));
+        Optional<Usuarios> usuario = usuariosRepository.findById(usuaId);
         if (usuario.isPresent()) {
             return activosTecnologicosRepository.findByUsuario(usuario.get());
         }

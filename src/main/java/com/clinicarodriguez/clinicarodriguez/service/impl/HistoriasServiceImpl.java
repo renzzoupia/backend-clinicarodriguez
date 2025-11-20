@@ -21,7 +21,7 @@ public class HistoriasServiceImpl implements HistoriasService {
     }
 
     @Override
-    public Historias findById(Long id) {
+    public Historias findById(Integer id) {
         return historiasRepository.findById(id).orElse(null);
     }
 
@@ -44,32 +44,22 @@ public class HistoriasServiceImpl implements HistoriasService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         historiasRepository.deleteById(id);
     }
 
     @Override
-    public List<Historias> findByPacienteId(Long pacienteId) {
+    public List<Historias> findByPacienteId(Integer pacienteId) {
         return historiasRepository.findByPacienteId(pacienteId);
     }
 
     @Override
-    public List<Historias> findByUsuarioId(Long usuarioId) {
+    public List<Historias> findByUsuarioId(Integer usuarioId) {
         return historiasRepository.findByUsuarioId(usuarioId);
     }
 
     @Override
-    public List<Historias> findByHistFecha(LocalDate fecha) {
-        return historiasRepository.findByHistFecha(fecha);
-    }
-
-    @Override
-    public List<Historias> findByFechaRange(LocalDate fechaInicio, LocalDate fechaFin) {
-        return historiasRepository.findByFechaRange(fechaInicio, fechaFin);
-    }
-
-    @Override
-    public long countByPacienteId(Long pacienteId) {
+    public long countByPacienteId(Integer pacienteId) {
         return historiasRepository.countByPacienteId(pacienteId);
     }
 }

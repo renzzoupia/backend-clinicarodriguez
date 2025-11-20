@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.clinicarodriguez.clinicarodriguez.model;
 
 import jakarta.persistence.*;
@@ -14,28 +10,26 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "medicos")
-public class Medicos implements Serializable{
+public class Medicos implements Serializable {
 
     @Id
     @Column(name = "medi_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long mediId;
+    private Integer mediId;
 
-    @Column(name = "medi_nombre")
-    private String mediNombre;
+    @OneToOne
+    @JoinColumn(name = "medi_pers_id", unique = true, nullable = false)
+    private Personas persona;
     
-    @Column(name = "medi_apellidos")
-    private String mediApellido;
-    
-    @Column(name = "medi_foto_url")
-    private String mediFotoUrl;
-    
-    @Column(name = "medi_estado")
-    private String mediEstado;
+    @OneToOne
+    @JoinColumn(name = "medi_usua_id", unique = true, nullable = false)
+    private Usuarios usuarios;
 
-    @OneToOne(cascade = {CascadeType.REMOVE})
-    @JoinColumn(name = "medi_usua_id", unique = true)
-    private Usuarios usuario;
+    @Column(name = "medi_nro_colegiatura", unique = true, length = 20)
+    private String mediNroColegiatura;
+
+    @Column(name = "medi_estado", nullable = false)
+    private Boolean mediEstado;
 
     @JsonIgnore
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -49,52 +43,47 @@ public class Medicos implements Serializable{
     @OneToMany(mappedBy = "medico", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DiasMedico> diasMedicos = new HashSet<>();
 
-    public Long getMediId() {
+    // Getters and Setters
+
+    public Integer getMediId() {
         return mediId;
     }
 
-    public void setMediId(Long mediId) {
+    public void setMediId(Integer mediId) {
         this.mediId = mediId;
     }
 
-    public String getMediNombre() {
-        return mediNombre;
+    public Personas getPersona() {
+        return persona;
     }
 
-    public void setMediNombre(String mediNombre) {
-        this.mediNombre = mediNombre;
+    public void setPersona(Personas persona) {
+        this.persona = persona;
     }
 
-    public String getMediApellido() {
-        return mediApellido;
+    public Usuarios getUsuarios() {
+        return usuarios;
     }
 
-    public void setMediApellido(String mediApellido) {
-        this.mediApellido = mediApellido;
+    public void setUsuarios(Usuarios usuarios) {
+        this.usuarios = usuarios;
     }
 
-    public String getMediFotoUrl() {
-        return mediFotoUrl;
+    
+    public String getMediNroColegiatura() {
+        return mediNroColegiatura;
     }
 
-    public void setMediFotoUrl(String mediFotoUrl) {
-        this.mediFotoUrl = mediFotoUrl;
+    public void setMediNroColegiatura(String mediNroColegiatura) {
+        this.mediNroColegiatura = mediNroColegiatura;
     }
 
-    public String getMediEstado() {
+    public Boolean getMediEstado() {
         return mediEstado;
     }
 
-    public void setMediEstado(String mediEstado) {
+    public void setMediEstado(Boolean mediEstado) {
         this.mediEstado = mediEstado;
-    }
-
-    public Usuarios getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuarios usuario) {
-        this.usuario = usuario;
     }
 
     public Set<MedicosEspecialidades> getMedicosEspecialidades() {

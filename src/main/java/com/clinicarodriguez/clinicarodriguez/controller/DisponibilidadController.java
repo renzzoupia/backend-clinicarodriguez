@@ -35,7 +35,7 @@ public class DisponibilidadController {
      * 
      */
     @GetMapping("/especialidad/{especialidadId}")
-    public ResponseEntity<?> obtenerDisponibilidadPorEspecialidad(@PathVariable Long especialidadId) {
+    public ResponseEntity<?> obtenerDisponibilidadPorEspecialidad(@PathVariable Integer especialidadId) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -103,7 +103,7 @@ public class DisponibilidadController {
      */
     @GetMapping("/slots")
     public ResponseEntity<?> obtenerSlotsDisponibles(
-            @RequestParam Long medicoId,
+            @RequestParam Integer medicoId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         
         HashMap<String, Object> result = new HashMap<>();

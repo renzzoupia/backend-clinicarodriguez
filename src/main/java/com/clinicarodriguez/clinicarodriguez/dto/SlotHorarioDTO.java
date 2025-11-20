@@ -11,7 +11,7 @@ public class SlotHorarioDTO {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private boolean disponible;
-    private Long citaId; // ID de la cita que ocupa este slot (si está ocupado)
+    private Integer citaId;
     
     public SlotHorarioDTO() {
     }
@@ -22,7 +22,7 @@ public class SlotHorarioDTO {
         this.disponible = disponible;
     }
     
-    public SlotHorarioDTO(LocalTime horaInicio, LocalTime horaFin, boolean disponible, Long citaId) {
+    public SlotHorarioDTO(LocalTime horaInicio, LocalTime horaFin, boolean disponible, Integer citaId) {
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.disponible = disponible;
@@ -54,11 +54,11 @@ public class SlotHorarioDTO {
         this.disponible = disponible;
     }
 
-    public Long getCitaId() {
+    public Integer getCitaId() {
         return citaId;
     }
 
-    public void setCitaId(Long citaId) {
+    public void setCitaId(Integer citaId) {
         this.citaId = citaId;
     }
 }

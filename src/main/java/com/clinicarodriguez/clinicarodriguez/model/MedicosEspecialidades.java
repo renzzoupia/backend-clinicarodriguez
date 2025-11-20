@@ -10,7 +10,7 @@ public class MedicosEspecialidades implements Serializable {
     @Id
     @Column(name = "mees_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long meesId;
+    private Integer meesId;
 
     @ManyToOne
     @JoinColumn(name = "mees_medi_id", nullable = false)
@@ -20,11 +20,11 @@ public class MedicosEspecialidades implements Serializable {
     @JoinColumn(name = "mees_espe_id", nullable = false)
     private Especialidades especialidad;
 
-    public Long getMeesId() {
+    public Integer getMeesId() {
         return meesId;
     }
 
-    public void setMeesId(Long meesId) {
+    public void setMeesId(Integer meesId) {
         this.meesId = meesId;
     }
 

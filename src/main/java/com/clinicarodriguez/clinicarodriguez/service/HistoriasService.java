@@ -8,21 +8,17 @@ public interface HistoriasService {
     
     public List<Historias> findAll();
     
-    public Historias findById(Long id);
+    public Historias findById(Integer id);
     
     public Historias save(Historias historia);
     
     public void delete(Historias historia);
     
-    public void deleteById(Long id);
+    public void deleteById(Integer id);
     
-    public List<Historias> findByPacienteId(Long pacienteId);
+    public List<Historias> findByPacienteId(Integer pacienteId);
     
-    public List<Historias> findByUsuarioId(Long usuarioId);
+    public List<Historias> findByUsuarioId(Integer usuarioId);
     
-    public List<Historias> findByHistFecha(LocalDate fecha);
-    
-    public List<Historias> findByFechaRange(LocalDate fechaInicio, LocalDate fechaFin);
-    
-    public long countByPacienteId(Long pacienteId);
+    public long countByPacienteId(Integer pacienteId);
 }

@@ -1,37 +1,47 @@
 package com.clinicarodriguez.clinicarodriguez.repository;
 
 import com.clinicarodriguez.clinicarodriguez.model.Paciente;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     
-    // Buscar paciente por DNI
-    Optional<Paciente> findByPaciDni(String dni);
-    
-    // Buscar paciente por email
-    Optional<Paciente> findByPaciEmail(String email);
-    
-    // Buscar paciente por número de historia
-    Optional<Paciente> findByPaciNumhistoria(String numHistoria);
+    // Buscar paciente por persona_id
+    @Query("SELECT p FROM Paciente p WHERE p.persona.persId = :personaId")
+    Optional<Paciente> findByPersonaId(@Param("personaId") Integer personaId);
     
     // Buscar pacientes por estado
-    List<Paciente> findByPaciEstado(Integer estado);
+    @Query("SELECT p FROM Paciente p WHERE p.paciEstado = :estado")
+    List<Paciente> findByEstado(@Param("estado") Integer estado);
     
-    // Buscar pacientes por nombre (búsqueda parcial)
-    @Query("SELECT p FROM Paciente p WHERE LOWER(p.paciNombrecompleto) LIKE LOWER(CONCAT('%', :nombre, '%'))")
-    List<Paciente> findByNombreContaining(@Param("nombre") String nombre);
+    // Listar pacientes activos con información de persona
+    @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per WHERE p.paciEstado = true ORDER BY per.persNombrecompleto")
+    List<Paciente> findAllActivosConPersona();
     
-    // Verificar si existe DNI
-    boolean existsByPaciDni(String dni);
+    // Listar todos los pacientes con persona
+    @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per ORDER BY per.persNombrecompleto")
+    List<Paciente> findAllConPersona();
     
-    // Verificar si existe email
-    boolean existsByPaciEmail(String email);
     
     // Contar pacientes activos
-    @Query("SELECT COUNT(p) FROM Paciente p WHERE p.paciEstado = 1")
+    @Query("SELECT COUNT(p) FROM Paciente p WHERE p.paciEstado = true")
     long countPacientesActivos();
+    
+    // Buscar pacientes por DNI parcial (para autocompletado)
+    @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per " +
+           "WHERE per.persNroDoc LIKE CONCAT(:dniBusqueda, '%') " +
+           "AND p.paciEstado = true " +
+           "ORDER BY per.persNroDoc")
+    List<Paciente> findByDniStartingWith(@Param("dniBusqueda") String dniBusqueda);
+    
+    // Buscar paciente por DNI exacto
+    @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per " +
+           "WHERE per.persNroDoc = :dni")
+    Optional<Paciente> findByDniExacto(@Param("dni") String dni);
 }

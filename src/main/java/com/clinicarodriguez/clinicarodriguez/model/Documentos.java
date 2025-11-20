@@ -11,7 +11,7 @@ public class Documentos implements Serializable {
     @Id
     @Column(name = "docu_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long docuId;
+    private Integer docuId;
 
     @ManyToOne
     @JoinColumn(name = "docu_hist_id", nullable = false)
@@ -38,11 +38,11 @@ public class Documentos implements Serializable {
     @Column(name = "docu_estado")
     private Boolean docuEstado;
 
-    public Long getDocuId() {
+    public Integer getDocuId() {
         return docuId;
     }
 
-    public void setDocuId(Long docuId) {
+    public void setDocuId(Integer docuId) {
         this.docuId = docuId;
     }
 

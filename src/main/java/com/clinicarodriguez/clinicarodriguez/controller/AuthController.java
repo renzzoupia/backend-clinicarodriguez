@@ -87,7 +87,7 @@ public class AuthController {
             // Generar token JWT
             String token = jwtTokenProvider.generateToken(
                 usuario.getUsuaUsername(), 
-                usuario.getUsuaId(),
+                Long.valueOf(usuario.getUsuaId()),
                 rolePrincipal
             );
             
@@ -123,12 +123,6 @@ public class AuthController {
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
             
-            if (usuario.getUsuaEmail() == null || usuario.getUsuaEmail().isEmpty()) {
-                result.put("success", false);
-                result.put("message", "El email es requerido");
-                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
-            }
-            
             if (usuario.getUsuaClave() == null || usuario.getUsuaClave().isEmpty()) {
                 result.put("success", false);
                 result.put("message", "La contraseña es requerida");
@@ -139,13 +133,6 @@ public class AuthController {
             if (usuariosService.existsByUsername(usuario.getUsuaUsername())) {
                 result.put("success", false);
                 result.put("message", "El username ya está registrado");
-                return new ResponseEntity<>(result, HttpStatus.CONFLICT);
-            }
-            
-            // Verificar si el email ya existe
-            if (usuariosService.existsByEmail(usuario.getUsuaEmail())) {
-                result.put("success", false);
-                result.put("message", "El email ya está registrado");
                 return new ResponseEntity<>(result, HttpStatus.CONFLICT);
             }
             

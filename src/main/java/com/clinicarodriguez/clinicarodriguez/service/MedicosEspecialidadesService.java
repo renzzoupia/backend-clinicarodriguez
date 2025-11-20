@@ -7,21 +7,21 @@ public interface MedicosEspecialidadesService {
     
     public List<MedicosEspecialidades> findAll();
 
-    public MedicosEspecialidades findById(Long id);
+    public MedicosEspecialidades findById(Integer id);
 
     public MedicosEspecialidades save(MedicosEspecialidades medicosEspecialidades);
 
     public void delete(MedicosEspecialidades medicosEspecialidades);
 
-    public void deleteById(Long id);
+    public void deleteById(Integer id);
     
     // Métodos específicos para la relación
-    public List<MedicosEspecialidades> findByMedicoId(Long medicoId);
+    public List<MedicosEspecialidades> findByMedicoId(Integer medicoId);
     
-    public List<MedicosEspecialidades> findByEspecialidadId(Long especialidadId);
+    public List<MedicosEspecialidades> findByEspecialidadId(Integer especialidadId);
     
-    public boolean existsByMedicoAndEspecialidad(Long medicoId, Long especialidadId);
+    public boolean existsByMedicoAndEspecialidad(Integer medicoId, Integer especialidadId);
     
-    public MedicosEspecialidades asignarEspecialidadAMedico(Long medicoId, Long especialidadId);
+    public MedicosEspecialidades asignarEspecialidadAMedico(Integer medicoId, Integer especialidadId);
 }
 

@@ -1,5 +1,6 @@
 package com.clinicarodriguez.clinicarodriguez.controller;
 
+import com.clinicarodriguez.clinicarodriguez.dto.AreaSimpleDTO;
 import com.clinicarodriguez.clinicarodriguez.model.Areas;
 import com.clinicarodriguez.clinicarodriguez.service.AreasService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/areas")
@@ -19,15 +21,48 @@ public class AreasController {
     @Autowired
     private AreasService areasService;
 
-    // Listar todas las áreas
+    // Listar todas las áreas (jerárquico - para tablas)
     @GetMapping
     public ResponseEntity<Map<String, Object>> listarTodas() {
         Map<String, Object> response = new HashMap<>();
         try {
-            List<Areas> areas = areasService.listarTodas();
+            List<Areas> todasLasAreas = areasService.listarTodas();
+
+            // ✨ SOLUCIÓN: Filtrar solo áreas raíz
+            List<Areas> areasRaiz = todasLasAreas.stream()
+                .filter(area -> area.getAreaPadre() == null)
+                .collect(Collectors.toList());
+
             response.put("success", true);
             response.put("message", "Áreas obtenidas correctamente");
-            response.put("data", areas);
+            response.put("data", areasRaiz); // Las sub-áreas vienen automáticamente por @JsonManagedReference
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Error al obtener áreas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    
+    // Listar todas las áreas de forma plana (sin jerarquía - para formularios <select>)
+    @GetMapping("/normal")
+    public ResponseEntity<Map<String, Object>> listarNormal() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            List<Areas> todasLasAreas = areasService.listarTodas();
+            
+            // Convertir a DTO simple sin relaciones jerárquicas
+            List<AreaSimpleDTO> areasSimples = todasLasAreas.stream()
+                .map(area -> new AreaSimpleDTO(
+                    area.getAreaId(),
+                    area.getAreaNombre(),
+                    area.getAreaDescripcion()
+                ))
+                .collect(Collectors.toList());
+            
+            response.put("success", true);
+            response.put("message", "Lista de áreas para formulario");
+            response.put("data", areasSimples);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("success", false);

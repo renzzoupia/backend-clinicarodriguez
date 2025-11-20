@@ -6,12 +6,12 @@ import java.util.List;
 public interface EspecialidadesService {
     public List<Especialidades> findAll();
 
-    public Especialidades findById(Long id);
+    public Especialidades findById(Integer id);
 
     public Especialidades save(Especialidades especialidad);
 
     public void delete(Especialidades especialidad);
 
-    public void deleteById(Long id);
+    public void deleteById(Integer id);
 }
 

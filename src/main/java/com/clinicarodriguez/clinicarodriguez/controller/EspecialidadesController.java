@@ -35,7 +35,7 @@ public class EspecialidadesController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Especialidades> findById(@PathVariable Long id) {
+    public ResponseEntity<Especialidades> findById(@PathVariable Integer id) {
         Optional<Especialidades> especialidad = especialidadesRepository.findById(id);
 
         if (especialidad.isPresent()) {
@@ -46,7 +46,7 @@ public class EspecialidadesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
 
         Optional<Especialidades> data = especialidadesRepository.findById(id);
@@ -74,7 +74,7 @@ public class EspecialidadesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Especialidades especialidad) {
+    public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody Especialidades especialidad) {
         HashMap<String, Object> result = new HashMap<>();
         Optional<Especialidades> data = especialidadesRepository.findById(id);
 

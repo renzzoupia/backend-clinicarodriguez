@@ -1,27 +1,25 @@
 package com.clinicarodriguez.clinicarodriguez.dto;
 
 import com.clinicarodriguez.clinicarodriguez.model.Especialidades;
+import com.clinicarodriguez.clinicarodriguez.model.Usuarios;
 import java.util.List;
 
 public class MedicoConEspecialidadesDTO {
     
-    private Long mediId;
+    private Integer mediId;
     private String mediNombre;
-    private String mediApellido;
     private String mediFotoUrl;
     private String mediEstado;
-    private UsuarioSimpleDTO usuario;
+    private Usuarios usuario;
     private List<EspecialidadSimpleDTO> especialidades;
     
     public MedicoConEspecialidadesDTO() {
     }
     
-    public MedicoConEspecialidadesDTO(Long mediId, String mediNombre, String mediApellido, 
-                                       String mediFotoUrl, String mediEstado,
-                                       UsuarioSimpleDTO usuario, List<EspecialidadSimpleDTO> especialidades) {
+    public MedicoConEspecialidadesDTO(Integer mediId, String mediNombre, String mediFotoUrl, String mediEstado,
+                                       Usuarios usuario, List<EspecialidadSimpleDTO> especialidades) {
         this.mediId = mediId;
         this.mediNombre = mediNombre;
-        this.mediApellido = mediApellido;
         this.mediFotoUrl = mediFotoUrl;
         this.mediEstado = mediEstado;
         this.usuario = usuario;
@@ -29,11 +27,11 @@ public class MedicoConEspecialidadesDTO {
     }
 
     // Getters y Setters
-    public Long getMediId() {
+    public Integer getMediId() {
         return mediId;
     }
 
-    public void setMediId(Long mediId) {
+    public void setMediId(Integer mediId) {
         this.mediId = mediId;
     }
 
@@ -43,14 +41,6 @@ public class MedicoConEspecialidadesDTO {
 
     public void setMediNombre(String mediNombre) {
         this.mediNombre = mediNombre;
-    }
-
-    public String getMediApellido() {
-        return mediApellido;
-    }
-
-    public void setMediApellido(String mediApellido) {
-        this.mediApellido = mediApellido;
     }
 
     public String getMediFotoUrl() {
@@ -69,11 +59,11 @@ public class MedicoConEspecialidadesDTO {
         this.mediEstado = mediEstado;
     }
 
-    public UsuarioSimpleDTO getUsuario() {
+    public Usuarios getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(UsuarioSimpleDTO usuario) {
+    public void setUsuario(Usuarios usuario) {
         this.usuario = usuario;
     }
 
@@ -87,7 +77,7 @@ public class MedicoConEspecialidadesDTO {
     
     // Clase interna para representar usuario de forma simple
     public static class UsuarioSimpleDTO {
-        private Long usuaId;
+        private Integer usuaId;
         private String usuaUsername;
         private String usuaNombrecompleto;
         private String usuaEmail;
@@ -95,18 +85,18 @@ public class MedicoConEspecialidadesDTO {
         public UsuarioSimpleDTO() {
         }
 
-        public UsuarioSimpleDTO(Long usuaId, String usuaUsername, String usuaNombrecompleto, String usuaEmail) {
+        public UsuarioSimpleDTO(Integer usuaId, String usuaUsername, String usuaNombrecompleto, String usuaEmail) {
             this.usuaId = usuaId;
             this.usuaUsername = usuaUsername;
             this.usuaNombrecompleto = usuaNombrecompleto;
             this.usuaEmail = usuaEmail;
         }
 
-        public Long getUsuaId() {
+        public Integer getUsuaId() {
             return usuaId;
         }
 
-        public void setUsuaId(Long usuaId) {
+        public void setUsuaId(Integer usuaId) {
             this.usuaId = usuaId;
         }
 
@@ -137,24 +127,24 @@ public class MedicoConEspecialidadesDTO {
     
     // Clase interna para representar especialidades de forma simple
     public static class EspecialidadSimpleDTO {
-        private Long espeId;
+        private Integer espeId;
         private String espeNombre;
         private String espeDescripcion;
 
         public EspecialidadSimpleDTO() {
         }
 
-        public EspecialidadSimpleDTO(Long espeId, String espeNombre, String espeDescripcion) {
+        public EspecialidadSimpleDTO(Integer espeId, String espeNombre, String espeDescripcion) {
             this.espeId = espeId;
             this.espeNombre = espeNombre;
             this.espeDescripcion = espeDescripcion;
         }
 
-        public Long getEspeId() {
+        public Integer getEspeId() {
             return espeId;
         }
 
-        public void setEspeId(Long espeId) {
+        public void setEspeId(Integer espeId) {
             this.espeId = espeId;
         }
 

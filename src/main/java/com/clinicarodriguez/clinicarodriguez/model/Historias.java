@@ -28,23 +28,8 @@ public class Historias implements Serializable {
     @Column(name = "hist_num_historia")
     private Integer histNumHistoria;
 
-    @Column(name = "hist_fecha")
-    private LocalDateTime histFecha;
-
     @Column(name = "hist_registrofecha")
     private LocalDate histRegistrofecha;
-
-    @Column(name = "hist_talle", precision = 10, scale = 2)
-    private BigDecimal histTalle;
-
-    @Column(name = "hist_peso", precision = 10, scale = 3)
-    private BigDecimal histPeso;
-
-    @Column(name = "hist_temperatura_c", precision = 10, scale = 2)
-    private BigDecimal histTemperaturaC;
-
-    @Column(name = "hist_frec_cardiaca", precision = 10, scale = 2)
-    private BigDecimal histFrecCardiaca;
 
     @Column(name = "hist_estado")
     private Integer histEstado;
@@ -89,52 +74,12 @@ public class Historias implements Serializable {
         this.histNumHistoria = histNumHistoria;
     }
 
-    public LocalDateTime getHistFecha() {
-        return histFecha;
-    }
-
-    public void setHistFecha(LocalDateTime histFecha) {
-        this.histFecha = histFecha;
-    }
-
     public LocalDate getHistRegistrofecha() {
         return histRegistrofecha;
     }
 
     public void setHistRegistrofecha(LocalDate histRegistrofecha) {
         this.histRegistrofecha = histRegistrofecha;
-    }
-
-    public BigDecimal getHistTalle() {
-        return histTalle;
-    }
-
-    public void setHistTalle(BigDecimal histTalle) {
-        this.histTalle = histTalle;
-    }
-
-    public BigDecimal getHistPeso() {
-        return histPeso;
-    }
-
-    public void setHistPeso(BigDecimal histPeso) {
-        this.histPeso = histPeso;
-    }
-
-    public BigDecimal getHistTemperaturaC() {
-        return histTemperaturaC;
-    }
-
-    public void setHistTemperaturaC(BigDecimal histTemperaturaC) {
-        this.histTemperaturaC = histTemperaturaC;
-    }
-
-    public BigDecimal getHistFrecCardiaca() {
-        return histFrecCardiaca;
-    }
-
-    public void setHistFrecCardiaca(BigDecimal histFrecCardiaca) {
-        this.histFrecCardiaca = histFrecCardiaca;
     }
 
     public Integer getHistEstado() {

@@ -1,8 +1,12 @@
 package com.clinicarodriguez.clinicarodriguez.controller;
 
+import com.clinicarodriguez.clinicarodriguez.dto.RegistrarUsuarioDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.UsuarioConPersonaDTO;
+import com.clinicarodriguez.clinicarodriguez.model.Personas;
 import com.clinicarodriguez.clinicarodriguez.model.Usuarios;
 import com.clinicarodriguez.clinicarodriguez.repository.UsuariosRepository;
 import com.clinicarodriguez.clinicarodriguez.service.FileStorageService;
+import com.clinicarodriguez.clinicarodriguez.service.UsuariosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Optional;
@@ -31,6 +35,9 @@ public class UsuariosController {
     private UsuariosRepository usuariosRepository;
     
     @Autowired
+    private UsuariosService usuariosService;
+    
+    @Autowired
     private FileStorageService fileStorageService;
     
     @GetMapping()
@@ -43,7 +50,7 @@ public class UsuariosController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Usuarios> findById(@PathVariable Long id) {
+    public ResponseEntity<Usuarios> findById(@PathVariable Integer id) {
         Optional<Usuarios> usuario = usuariosRepository.findById(id);
 
         if (usuario.isPresent()) {
@@ -54,7 +61,7 @@ public class UsuariosController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
 
         Optional<Usuarios> data = usuariosRepository.findById(id);
@@ -68,6 +75,83 @@ public class UsuariosController {
             result.put("success", true);
             result.put("message", "Usuario eliminado correctamente");
             return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+    }
+
+    // Registrar usuario con persona
+    @PostMapping("/registrar")
+    public ResponseEntity<?> registrarUsuario(@RequestBody RegistrarUsuarioDTO dto) {
+        HashMap<String, Object> result = new HashMap<>();
+        
+        try {
+            // Validaciones
+            if (dto.getNombrecompleto() == null || dto.getNombrecompleto().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El nombre completo es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getTipoDoc() == null) {
+                result.put("success", false);
+                result.put("message", "El tipo de documento es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getNroDoc() == null || dto.getNroDoc().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El número de documento es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getUsername() == null || dto.getUsername().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El username es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "La contraseña es requerida");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            // Construir entidad Personas
+            Personas persona = new Personas();
+            persona.setPersNombrecompleto(dto.getNombrecompleto());
+            persona.setPersTipoDoc(dto.getTipoDoc());
+            persona.setPersNroDoc(dto.getNroDoc());
+            persona.setPersSexo(dto.getSexo());
+            persona.setPersFecNacimiento(dto.getFecNacimiento());
+            persona.setPersEstadoCivil(dto.getEstadoCivil());
+            persona.setPersTelefono(dto.getTelefono());
+            persona.setPersEmail(dto.getEmail());
+            persona.setPersDireccion(dto.getDireccion());
+            persona.setPersFotoUrl(dto.getFotoUrl());
+            persona.setPersEsActivo(true);
+            
+            // Crear usuario completo (persona + usuario)
+            Usuarios usuarioGuardado = usuariosService.crearUsuarioCompleto(
+                persona,
+                dto.getUsername(),
+                dto.getPassword()
+            );
+            
+            // Convertir a DTO de respuesta
+            UsuarioConPersonaDTO responseDTO = convertirADTO(usuarioGuardado);
+            
+            result.put("success", true);
+            result.put("message", "Usuario registrado exitosamente");
+            result.put("data", responseDTO);
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+            
+        } catch (RuntimeException e) {
+            result.put("success", false);
+            result.put("message", e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "Error al registrar usuario: " + e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -119,7 +203,7 @@ public class UsuariosController {
                         .toUriString();
                 
                 // Asignar la URL al usuario
-                usuario.setUsuaFotoUrl(fileDownloadUri);
+                //usuario.setUsuaFotoUrl(fileDownloadUri);
             }
             
             // Guardar el usuario en la base de datos
@@ -139,7 +223,7 @@ public class UsuariosController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody Usuarios usuario) {
+    public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody Usuarios usuario) {
         HashMap<String, Object> result = new HashMap<>();
         Optional<Usuarios> data = usuariosRepository.findById(id);
 
@@ -152,14 +236,14 @@ public class UsuariosController {
         try {
             Usuarios existingUsuario = data.get();
             existingUsuario.setUsuaUsername(usuario.getUsuaUsername());
-            existingUsuario.setUsuaNombrecompleto(usuario.getUsuaNombrecompleto());
+            //existingUsuario.setUsuaNombrecompleto(usuario.getUsuaNombrecompleto());
             existingUsuario.setUsuaClave(usuario.getUsuaClave());
-            existingUsuario.setUsuaDni(usuario.getUsuaDni());
-            existingUsuario.setUsuaEmail(usuario.getUsuaEmail());
-            existingUsuario.setUsuaTelefono(usuario.getUsuaTelefono());
-            existingUsuario.setUsuaFotoUrl(usuario.getUsuaFotoUrl());
+            //existingUsuario.setUsuaDni(usuario.getUsuaDni());
+            //existingUsuario.setUsuaEmail(usuario.getUsuaEmail());
+            //existingUsuario.setUsuaTelefono(usuario.getUsuaTelefono());
+            //existingUsuario.setUsuaFotoUrl(usuario.getUsuaFotoUrl());
             //existingUsuario.setUsuaEstado(usuario.getUsuaEstado());
-            existingUsuario.setUsuaEsActivo(usuario.getUsuaEsActivo());
+            //existingUsuario.setUsuaEsActivo(usuario.getUsuaEsActivo());
             usuariosRepository.save(existingUsuario);
 
             result.put("success", true);
@@ -171,6 +255,29 @@ public class UsuariosController {
             result.put("message", "Error al actualizar: " + ex.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    // Método auxiliar para convertir Usuario a DTO
+    private UsuarioConPersonaDTO convertirADTO(Usuarios usuario) {
+        Personas persona = usuario.getPersona();
+        
+        return new UsuarioConPersonaDTO(
+            usuario.getUsuaId(),
+            usuario.getUsuaUsername(),
+            usuario.getUsuaUltimaSesion(),
+            usuario.getUsuaEstado(),
+            persona.getPersId(),
+            persona.getPersNombrecompleto(),
+            persona.getPersTipoDoc(),
+            persona.getPersNroDoc(),
+            persona.getPersSexo(),
+            persona.getPersFecNacimiento(),
+            persona.getPersEstadoCivil(),
+            persona.getPersTelefono(),
+            persona.getPersEmail(),
+            persona.getPersDireccion(),
+            persona.getPersFotoUrl()
+        );
     }
 }
 

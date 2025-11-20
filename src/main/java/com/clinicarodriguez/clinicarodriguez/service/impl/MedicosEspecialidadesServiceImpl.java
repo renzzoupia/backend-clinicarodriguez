@@ -31,7 +31,7 @@ public class MedicosEspecialidadesServiceImpl implements MedicosEspecialidadesSe
     }
 
     @Override
-    public MedicosEspecialidades findById(Long id) {
+    public MedicosEspecialidades findById(Integer id) {
         return medicosEspecialidadesRepository.findById(id).orElse(null);
     }
 
@@ -46,28 +46,28 @@ public class MedicosEspecialidadesServiceImpl implements MedicosEspecialidadesSe
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         medicosEspecialidadesRepository.deleteById(id);
     }
 
     @Override
-    public List<MedicosEspecialidades> findByMedicoId(Long medicoId) {
+    public List<MedicosEspecialidades> findByMedicoId(Integer medicoId) {
         return medicosEspecialidadesRepository.findByMedicoId(medicoId);
     }
 
     @Override
-    public List<MedicosEspecialidades> findByEspecialidadId(Long especialidadId) {
+    public List<MedicosEspecialidades> findByEspecialidadId(Integer especialidadId) {
         return medicosEspecialidadesRepository.findByEspecialidadId(especialidadId);
     }
 
     @Override
-    public boolean existsByMedicoAndEspecialidad(Long medicoId, Long especialidadId) {
+    public boolean existsByMedicoAndEspecialidad(Integer medicoId, Integer especialidadId) {
         return medicosEspecialidadesRepository.existsByMedicoAndEspecialidad(medicoId, especialidadId);
     }
 
     @Transactional
     @Override
-    public MedicosEspecialidades asignarEspecialidadAMedico(Long medicoId, Long especialidadId) {
+    public MedicosEspecialidades asignarEspecialidadAMedico(Integer medicoId, Integer especialidadId) {
         // Verificar si ya existe la relación
         if (existsByMedicoAndEspecialidad(medicoId, especialidadId)) {
             return null; // Ya existe

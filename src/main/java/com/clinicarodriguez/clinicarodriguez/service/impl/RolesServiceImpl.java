@@ -21,7 +21,7 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public Optional<Roles> buscarPorId(Long id) {
+    public Optional<Roles> buscarPorId(Integer id) {
         return rolesRepository.findById(id);
     }
 
@@ -40,7 +40,7 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public Roles actualizar(Long id, Roles role) {
+    public Roles actualizar(Integer id, Roles role) {
         if (!rolesRepository.existsById(id)) {
             throw new RuntimeException("Rol con ID " + id + " no encontrado");
         }
@@ -56,7 +56,7 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public void eliminar(Long id) {
+    public void eliminar(Integer id) {
         if (!rolesRepository.existsById(id)) {
             throw new RuntimeException("Rol con ID " + id + " no encontrado");
         }

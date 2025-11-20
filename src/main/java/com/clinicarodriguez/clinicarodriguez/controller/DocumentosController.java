@@ -45,7 +45,7 @@ public class DocumentosController {
 
     // GET: Buscar documento por ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         Optional<Documentos> documento = documentosService.buscarPorId(id);
         
@@ -63,7 +63,7 @@ public class DocumentosController {
 
     // GET: Buscar documentos por historia
     @GetMapping("/historia/{histId}")
-    public ResponseEntity<?> buscarPorHistoria(@PathVariable Long histId) {
+    public ResponseEntity<?> buscarPorHistoria(@PathVariable Integer histId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Documentos> documentos = documentosService.buscarPorHistoria(histId);
         
@@ -154,7 +154,7 @@ public class DocumentosController {
     // PUT: Actualizar documento existente
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(
-            @PathVariable Long id,
+            @PathVariable Integer id,
             @RequestBody Documentos documento) {
         HashMap<String, Object> result = new HashMap<>();
         
@@ -173,7 +173,7 @@ public class DocumentosController {
 
     // DELETE: Eliminar documento
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -201,7 +201,7 @@ public class DocumentosController {
     @PostMapping("/upload")
     public ResponseEntity<?> uploadDocumento(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("histId") Long histId,
+            @RequestParam("histId") Integer histId,
             @RequestParam("nombre") String nombre,
             @RequestParam("tipo") String tipo,
             @RequestParam(value = "visiblePaciente", defaultValue = "true") Boolean visiblePaciente,

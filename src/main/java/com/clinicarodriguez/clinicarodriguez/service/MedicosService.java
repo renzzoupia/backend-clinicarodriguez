@@ -1,24 +1,38 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package com.clinicarodriguez.clinicarodriguez.service;
 
 import com.clinicarodriguez.clinicarodriguez.model.Medicos;
+import com.clinicarodriguez.clinicarodriguez.model.Personas;
 import java.util.List;
+import java.util.Optional;
 
-/**
- *
- * @author renzo
- */
 public interface MedicosService {
-    public List<Medicos> findAll();
-
-    public Medicos findById(Long id);
-
-    public Medicos save(Medicos paciente);
-
-    public void delete(Medicos paciente);
-
-    public void deleteById(Long id);
+    
+    // CRUD básico
+    List<Medicos> findAll();
+    Medicos findById(Integer id);
+    Medicos save(Medicos medico);
+    void delete(Medicos medico);
+    void deleteById(Integer id);
+    
+    // Métodos para crear médico completo (Persona + Medico)
+    Medicos crearMedicoCompleto(Personas persona, String nroColegiatura);
+    Medicos crearMedicoConUsuario(Personas persona, String username, String password, 
+                                   String nroColegiatura);
+    Medicos actualizarMedicoCompleto(Integer medicoId, Personas persona, String nroColegiatura, String rne);
+    
+    // Métodos personalizados
+    Optional<Medicos> findByPersonaId(Integer personaId);
+    Optional<Medicos> findByNroColegiatura(String nroColegiatura);
+    List<Medicos> findByEstado(Boolean estado);
+    List<Medicos> findAllActivosConPersona();
+    List<Medicos> findAllConPersona();
+    List<Medicos> findActivosByEspecialidadId(Integer especialidadId);
+    
+    // Validaciones
+    boolean existsByNroColegiatura(String nroColegiatura);
+    long countMedicosActivos();
+    
+    // Activar/Desactivar
+    Medicos activar(Integer id);
+    Medicos desactivar(Integer id);
 }

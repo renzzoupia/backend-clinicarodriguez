@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface DiasMedicoRepository extends JpaRepository<DiasMedico, Long> {
+public interface DiasMedicoRepository extends JpaRepository<DiasMedico, Integer> {
     
     // Buscar disponibilidad por médico
     @Query("SELECT dm FROM DiasMedico dm WHERE dm.medico.mediId = :medicoId")
-    List<DiasMedico> findByMedicoId(@Param("medicoId") Long medicoId);
+    List<DiasMedico> findByMedicoId(@Param("medicoId") Integer medicoId);
     
     // Buscar disponibilidad por día
     @Query("SELECT dm FROM DiasMedico dm WHERE dm.dia.diasId = :diaId")
@@ -18,5 +18,5 @@ public interface DiasMedicoRepository extends JpaRepository<DiasMedico, Long> {
     
     // Buscar disponibilidad activa de un médico
     @Query("SELECT dm FROM DiasMedico dm WHERE dm.medico.mediId = :medicoId AND dm.dimeEstado = 1")
-    List<DiasMedico> findByMedicoIdAndEstadoActivo(@Param("medicoId") Long medicoId);
+    List<DiasMedico> findByMedicoIdAndEstadoActivo(@Param("medicoId") Integer medicoId);
 }

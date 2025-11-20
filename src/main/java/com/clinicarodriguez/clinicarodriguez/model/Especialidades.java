@@ -13,7 +13,7 @@ public class Especialidades implements Serializable {
     @Id
     @Column(name = "espe_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long espeId;
+    private Integer espeId;
 
     @Column(name = "espe_nombre")
     private String espeNombre;
@@ -25,11 +25,11 @@ public class Especialidades implements Serializable {
     @OneToMany(mappedBy = "especialidad", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MedicosEspecialidades> medicosEspecialidades = new HashSet<>();
 
-    public Long getEspeId() {
+    public Integer getEspeId() {
         return espeId;
     }
 
-    public void setEspeId(Long espeId) {
+    public void setEspeId(Integer espeId) {
         this.espeId = espeId;
     }
 

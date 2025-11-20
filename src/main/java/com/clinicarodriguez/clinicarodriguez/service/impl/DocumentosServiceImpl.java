@@ -21,7 +21,7 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public Optional<Documentos> buscarPorId(Long id) {
+    public Optional<Documentos> buscarPorId(Integer id) {
         return documentosRepository.findById(id);
     }
 
@@ -31,7 +31,7 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public Documentos actualizar(Long id, Documentos documento) {
+    public Documentos actualizar(Integer id, Documentos documento) {
         if (documentosRepository.existsById(id)) {
             documento.setDocuId(id);
             return documentosRepository.save(documento);
@@ -40,7 +40,7 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public void eliminar(Long id) {
+    public void eliminar(Integer id) {
         if (documentosRepository.existsById(id)) {
             documentosRepository.deleteById(id);
         } else {
@@ -49,7 +49,7 @@ public class DocumentosServiceImpl implements DocumentosService {
     }
 
     @Override
-    public List<Documentos> buscarPorHistoria(Long histId) {
+    public List<Documentos> buscarPorHistoria(Integer histId) {
         return documentosRepository.findByHistoriaHistId(histId);
     }
 

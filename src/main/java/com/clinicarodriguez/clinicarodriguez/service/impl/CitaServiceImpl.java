@@ -28,7 +28,7 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public Cita findById(Long id) {
+    public Cita findById(Integer id) {
         return citaRepository.findById(id).orElse(null);
     }
 
@@ -93,6 +93,67 @@ public class CitaServiceImpl implements CitaService {
         
         return citaRepository.save(cita);
     }
+    
+    @Transactional
+    @Override
+    public Cita update(Cita cita) {
+        // Validaciones básicas
+        if (cita.getCitaId() == null) {
+            throw new RuntimeException("El ID de la cita es obligatorio para actualizar");
+        }
+        if (cita.getMedico() == null || cita.getMedico().getMediId() == null) {
+            throw new RuntimeException("El médico es obligatorio para actualizar una cita");
+        }
+        if (cita.getCitaFecha() == null) {
+            throw new RuntimeException("La fecha es obligatoria para actualizar una cita");
+        }
+        if (cita.getCitaHora() == null) {
+            throw new RuntimeException("La hora es obligatoria para actualizar una cita");
+        }
+        
+        // Calcular cita_hora_fin automáticamente si no está definida
+        if (cita.getCitaHoraFin() == null) {
+            // Obtener el día de la semana
+            DayOfWeek diaSemana = cita.getCitaFecha().getDayOfWeek();
+            int diaId = diaSemana.getValue();
+            
+            // Buscar configuración del médico para ese día
+            List<DiasMedico> diasMedico = diasMedicoRepository
+                    .findByMedicoIdAndEstadoActivo(cita.getMedico().getMediId());
+            
+            DiasMedico diaConfig = diasMedico.stream()
+                    .filter(dm -> dm.getDia().getDiasId() == diaId)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException(
+                        "El médico no tiene configuración de horario para el día: " + diaSemana));
+            
+            // Calcular hora fin
+            Integer duracion = diaConfig.getDimeDuracion();
+            LocalTime horaFin = cita.getCitaHora().plusMinutes(duracion);
+            cita.setCitaHoraFin(horaFin);
+        }
+        
+        // Validar que no haya solapamiento con otras citas (EXCLUYENDO la cita actual)
+        boolean haySolapamiento = citaRepository.existeSolapamientoExcluyendo(
+            cita.getMedico().getMediId(),
+            cita.getCitaFecha(),
+            cita.getCitaHora(),
+            cita.getCitaHoraFin(),
+            cita.getCitaId()  // Excluir la cita que se está editando
+        );
+        
+        if (haySolapamiento) {
+            throw new RuntimeException(
+                "Ya existe una cita agendada en ese horario. Por favor, seleccione otro horario.");
+        }
+        
+        // Establecer estado por defecto si no está definido
+        if (cita.getCitaEstado() == null || cita.getCitaEstado().isEmpty()) {
+            cita.setCitaEstado("PENDIENTE");
+        }
+        
+        return citaRepository.save(cita);
+    }
 
     @Transactional
     @Override
@@ -102,17 +163,17 @@ public class CitaServiceImpl implements CitaService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         citaRepository.deleteById(id);
     }
 
     @Override
-    public List<Cita> findByPacienteId(Long pacienteId) {
+    public List<Cita> findByPacienteId(Integer pacienteId) {
         return citaRepository.findByPacienteId(pacienteId);
     }
 
     @Override
-    public List<Cita> findByMedicoId(Long medicoId) {
+    public List<Cita> findByMedicoId(Integer medicoId) {
         return citaRepository.findByMedicoId(medicoId);
     }
 
@@ -122,7 +183,7 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public List<Cita> findByMedicoIdAndFecha(Long medicoId, LocalDate fecha) {
+    public List<Cita> findByMedicoIdAndFecha(Integer medicoId, LocalDate fecha) {
         return citaRepository.findByMedicoIdAndFecha(medicoId, fecha);
     }
 
@@ -137,12 +198,12 @@ public class CitaServiceImpl implements CitaService {
     }
 
     @Override
-    public long countByMedicoAndFecha(Long medicoId, LocalDate fecha) {
+    public long countByMedicoAndFecha(Integer medicoId, LocalDate fecha) {
         return citaRepository.countByMedicoAndFecha(medicoId, fecha);
     }
 
     @Override
-    public List<Cita> findProximasCitasByPaciente(Long pacienteId) {
+    public List<Cita> findProximasCitasByPaciente(Integer pacienteId) {
         return citaRepository.findProximasCitasByPaciente(pacienteId, LocalDate.now());
     }
 }

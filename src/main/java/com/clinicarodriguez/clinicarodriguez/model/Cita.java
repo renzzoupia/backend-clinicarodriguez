@@ -12,7 +12,7 @@ public class Cita implements Serializable {
     @Id
     @Column(name = "cita_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long citaId;
+    private Integer citaId;
 
     @ManyToOne
     @JoinColumn(name = "cita_paci_id", nullable = false)
@@ -43,11 +43,11 @@ public class Cita implements Serializable {
     @Column(name = "cita_fecha_registro")
     private LocalDate citaFechaRegistro;
 
-    public Long getCitaId() {
+    public Integer getCitaId() {
         return citaId;
     }
 
-    public void setCitaId(Long citaId) {
+    public void setCitaId(Integer citaId) {
         this.citaId = citaId;
     }
 

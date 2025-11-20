@@ -34,7 +34,7 @@ public class DiasMedicoController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         DiasMedico diasMedico = diasMedicoService.findById(id);
 
@@ -51,7 +51,7 @@ public class DiasMedicoController {
     }
     
     @GetMapping("/medico/{medicoId}")
-    public ResponseEntity<?> findByMedicoId(@PathVariable Long medicoId) {
+    public ResponseEntity<?> findByMedicoId(@PathVariable Integer medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "Disponibilidad del médico");
@@ -60,7 +60,7 @@ public class DiasMedicoController {
     }
     
     @GetMapping("/medico/{medicoId}/activos")
-    public ResponseEntity<?> findByMedicoIdActivos(@PathVariable Long medicoId) {
+    public ResponseEntity<?> findByMedicoIdActivos(@PathVariable Integer medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         result.put("success", true);
         result.put("message", "Disponibilidad activa del médico");
@@ -86,7 +86,7 @@ public class DiasMedicoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody DiasMedico diasMedico) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody DiasMedico diasMedico) {
         HashMap<String, Object> result = new HashMap<>();
         
         DiasMedico existing = diasMedicoService.findById(id);
@@ -111,7 +111,7 @@ public class DiasMedicoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         DiasMedico diasMedico = diasMedicoService.findById(id);
 

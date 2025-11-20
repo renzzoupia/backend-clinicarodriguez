@@ -10,16 +10,16 @@ public interface DocumentosService {
     // Métodos CRUD básicos
     List<Documentos> listarTodos();
     
-    Optional<Documentos> buscarPorId(Long id);
+    Optional<Documentos> buscarPorId(Integer id);
     
     Documentos guardar(Documentos documento);
     
-    Documentos actualizar(Long id, Documentos documento);
+    Documentos actualizar(Integer id, Documentos documento);
     
-    void eliminar(Long id);
+    void eliminar(Integer id);
     
     // Métodos de búsqueda especializados
-    List<Documentos> buscarPorHistoria(Long histId);
+    List<Documentos> buscarPorHistoria(Integer histId);
     
     List<Documentos> buscarConfidenciales(Boolean confidencial, Boolean estado);
     

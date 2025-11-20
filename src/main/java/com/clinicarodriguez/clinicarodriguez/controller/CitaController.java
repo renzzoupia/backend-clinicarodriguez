@@ -40,7 +40,7 @@ public class CitaController {
     
     // Obtener cita por ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         Cita cita = citaService.findById(id);
 
@@ -58,7 +58,7 @@ public class CitaController {
     
     // Buscar citas por paciente
     @GetMapping("/paciente/{pacienteId}")
-    public ResponseEntity<?> findByPacienteId(@PathVariable Long pacienteId) {
+    public ResponseEntity<?> findByPacienteId(@PathVariable Integer pacienteId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Cita> citas = citaService.findByPacienteId(pacienteId);
         
@@ -71,7 +71,7 @@ public class CitaController {
     
     // Buscar próximas citas de un paciente
     @GetMapping("/paciente/{pacienteId}/proximas")
-    public ResponseEntity<?> findProximasCitasByPaciente(@PathVariable Long pacienteId) {
+    public ResponseEntity<?> findProximasCitasByPaciente(@PathVariable Integer pacienteId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Cita> citas = citaService.findProximasCitasByPaciente(pacienteId);
         
@@ -83,7 +83,7 @@ public class CitaController {
     
     // Buscar citas por médico
     @GetMapping("/medico/{medicoId}")
-    public ResponseEntity<?> findByMedicoId(@PathVariable Long medicoId) {
+    public ResponseEntity<?> findByMedicoId(@PathVariable Integer medicoId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Cita> citas = citaService.findByMedicoId(medicoId);
         
@@ -111,7 +111,7 @@ public class CitaController {
     // Buscar citas por médico y fecha
     @GetMapping("/medico/{medicoId}/fecha/{fecha}")
     public ResponseEntity<?> findByMedicoAndFecha(
-            @PathVariable Long medicoId,
+            @PathVariable Integer medicoId,
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
         HashMap<String, Object> result = new HashMap<>();
         List<Cita> citas = citaService.findByMedicoIdAndFecha(medicoId, fecha);
@@ -184,7 +184,7 @@ public class CitaController {
 
     // Actualizar cita
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Cita cita) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Cita cita) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -201,12 +201,14 @@ public class CitaController {
             citaExistente.setMedico(cita.getMedico());
             citaExistente.setCitaFecha(cita.getCitaFecha());
             citaExistente.setCitaHora(cita.getCitaHora());
+            citaExistente.setCitaHoraFin(cita.getCitaHoraFin()); // Actualizar hora fin también
             citaExistente.setCitaTipo(cita.getCitaTipo());
             citaExistente.setCitaMotivo(cita.getCitaMotivo());
             citaExistente.setCitaEstado(cita.getCitaEstado());
             citaExistente.setCitaFechaRegistro(cita.getCitaFechaRegistro());
             
-            Cita citaActualizada = citaService.save(citaExistente);
+            // Usar el método update que excluye la cita actual de la validación
+            Cita citaActualizada = citaService.update(citaExistente);
 
             result.put("success", true);
             result.put("message", "Cita actualizada correctamente");
@@ -222,7 +224,7 @@ public class CitaController {
 
     // Eliminar cita
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
 
         Cita cita = citaService.findById(id);

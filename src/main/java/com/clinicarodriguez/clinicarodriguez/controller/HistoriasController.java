@@ -39,7 +39,7 @@ public class HistoriasController {
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         Historias historia = historiasService.findById(id);
 
@@ -56,7 +56,7 @@ public class HistoriasController {
     }
     
     @GetMapping("/paciente/{pacienteId}")
-    public ResponseEntity<?> findByPacienteId(@PathVariable Long pacienteId) {
+    public ResponseEntity<?> findByPacienteId(@PathVariable Integer pacienteId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Historias> historias = historiasService.findByPacienteId(pacienteId);
         long count = historiasService.countByPacienteId(pacienteId);
@@ -69,37 +69,12 @@ public class HistoriasController {
     }
     
     @GetMapping("/usuario/{usuarioId}")
-    public ResponseEntity<?> findByUsuarioId(@PathVariable Long usuarioId) {
+    public ResponseEntity<?> findByUsuarioId(@PathVariable Integer usuarioId) {
         HashMap<String, Object> result = new HashMap<>();
         List<Historias> historias = historiasService.findByUsuarioId(usuarioId);
         
         result.put("success", true);
         result.put("message", "Historias creadas por el usuario");
-        result.put("data", historias);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-    
-    @GetMapping("/fecha/{fecha}")
-    public ResponseEntity<?> findByFecha(
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha) {
-        HashMap<String, Object> result = new HashMap<>();
-        List<Historias> historias = historiasService.findByHistFecha(fecha);
-        
-        result.put("success", true);
-        result.put("message", "Historias del día: " + fecha);
-        result.put("data", historias);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-    
-    @GetMapping("/rango")
-    public ResponseEntity<?> findByRango(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
-        HashMap<String, Object> result = new HashMap<>();
-        List<Historias> historias = historiasService.findByFechaRange(fechaInicio, fechaFin);
-        
-        result.put("success", true);
-        result.put("message", "Historias entre " + fechaInicio + " y " + fechaFin);
         result.put("data", historias);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -129,7 +104,7 @@ public class HistoriasController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Historias historia) {
+    public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Historias historia) {
         HashMap<String, Object> result = new HashMap<>();
         
         try {
@@ -144,11 +119,6 @@ public class HistoriasController {
             existing.setUsuario(historia.getUsuario());
             existing.setPaciente(historia.getPaciente());
             existing.setHistNumHistoria(historia.getHistNumHistoria());
-            existing.setHistFecha(historia.getHistFecha());
-            existing.setHistTalle(historia.getHistTalle());
-            existing.setHistPeso(historia.getHistPeso());
-            existing.setHistTemperaturaC(historia.getHistTemperaturaC());
-            existing.setHistFrecCardiaca(historia.getHistFrecCardiaca());
             existing.setHistEstado(historia.getHistEstado());
             
             Historias updated = historiasService.save(existing);
@@ -166,7 +136,7 @@ public class HistoriasController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
         HashMap<String, Object> result = new HashMap<>();
         Historias historia = historiasService.findById(id);
 

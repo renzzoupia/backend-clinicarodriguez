@@ -10,15 +10,15 @@ public interface RolesService {
     // CRUD básico
     List<Roles> listarTodos();
     
-    Optional<Roles> buscarPorId(Long id);
+    Optional<Roles> buscarPorId(Integer id);
     
     Optional<Roles> buscarPorNombre(String roleName);
     
     Roles guardar(Roles role);
     
-    Roles actualizar(Long id, Roles role);
+    Roles actualizar(Integer id, Roles role);
     
-    void eliminar(Long id);
+    void eliminar(Integer id);
     
     boolean existePorNombre(String roleName);
 }
