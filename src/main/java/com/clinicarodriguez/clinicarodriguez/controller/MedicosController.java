@@ -10,6 +10,8 @@ import com.clinicarodriguez.clinicarodriguez.model.Personas;
 import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO;
 import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO.EspecialidadSimpleDTO;
 import com.clinicarodriguez.clinicarodriguez.dto.MedicoConEspecialidadesDTO.UsuarioSimpleDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.VerMedicosDTO;
+import com.clinicarodriguez.clinicarodriguez.dto.VerMedicosDTO.EspecialidadDTO;
 import com.clinicarodriguez.clinicarodriguez.service.FileStorageService;
 import com.clinicarodriguez.clinicarodriguez.service.MedicosService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +63,24 @@ public class MedicosController {
         // Convertir a DTO con especialidades
         List<MedicoConEspecialidadesDTO> medicosDTO = medicos.stream()
             .map(this::convertirADTO)
+            .collect(Collectors.toList());
+        
+        result.put("success", true);
+        result.put("message", "Lista de Médicos");
+        result.put("data", medicosDTO);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    @GetMapping("/ver-medicos")
+    public ResponseEntity<?> verMedicos() {
+        HashMap<String, Object> result = new HashMap<>();
+        
+        // Obtener todos los médicos
+        List<Medicos> medicos = medicoRepository.findAll();
+        
+        // Convertir a DTO simplificado (sin usuario ni persona)
+        List<VerMedicosDTO> medicosDTO = medicos.stream()
+            .map(this::convertirAVerMedicosDTO)
             .collect(Collectors.toList());
         
         result.put("success", true);
@@ -437,6 +457,28 @@ public class MedicosController {
             medico.getUsuarios(), // Ya no hay relación directa con Usuario
             especialidades
             
+        );
+    }
+    
+    /**
+     * Método auxiliar para convertir un Medico a DTO simplificado
+     * Solo muestra: ID, nombre, foto y especialidades
+     */
+    private VerMedicosDTO convertirAVerMedicosDTO(Medicos medico) {
+        List<EspecialidadDTO> especialidades = medico.getMedicosEspecialidades()
+            .stream()
+            .map(me -> new EspecialidadDTO(
+                me.getEspecialidad().getEspeId(),
+                me.getEspecialidad().getEspeNombre(),
+                me.getEspecialidad().getEspeDescripcion()
+            ))
+            .collect(Collectors.toList());
+        
+        return new VerMedicosDTO(
+            medico.getMediId(),
+            medico.getPersona().getPersNombrecompleto(),
+            medico.getPersona().getPersFotoUrl(),
+            especialidades
         );
     }
 }

@@ -29,13 +29,20 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Configurar CORS
             .authorizeHttpRequests(auth -> auth
                 // Endpoints públicos (sin autenticación)
-                .requestMatchers("/api/auth/**").permitAll()  // Login y registro públicos
+                .requestMatchers("/api/auth/**").permitAll()  // Login y registro
+                .requestMatchers("/api/files/**").permitAll()  // Archivos estáticos (fotos, documentos)
                 
-                // Endpoints protegidos con JWT
-                //.requestMatchers("/api/pacientes/**").authenticated()  // Requiere JWT
+                // Endpoints públicos específicos del sistema
+                .requestMatchers("/api/especialidades").permitAll()  // Listar especialidades
+                .requestMatchers("/api/disponibilidad/especialidad/**").permitAll()  // Disponibilidad por especialidad
+                .requestMatchers("/api/medicos/ver-medicos").permitAll()  // Ver médicos (solo info básica)
+                .requestMatchers("/api/pacientes/registrar").permitAll()  // Registro de pacientes
+                .requestMatchers("/api/citas").permitAll()  // Crear citas (POST)
+                .requestMatchers("/api/pacientes/dni/**").permitAll()  // Buscar paciente por DNI
+                .requestMatchers("/api/documentos/paciente/dni/**").permitAll()  // Documentos por DNI
                 
-                // Todos los demás endpoints (temporal: sin protección)
-                .anyRequest().permitAll()  // Otros endpoints aún sin JWT
+                // Todos los demás endpoints requieren autenticación JWT
+                .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Sin sesiones (para JWT)

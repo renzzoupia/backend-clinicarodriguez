@@ -273,7 +273,7 @@ public class PacienteController {
         }
     }
 
-    // Actualizar paciente
+    // Actualizar paciente (solo estado)
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Paciente paciente) {
         HashMap<String, Object> result = new HashMap<>();
@@ -287,16 +287,7 @@ public class PacienteController {
                 return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
             }
 
-            // Actualizar campos
-//            pacienteExistente.setPaciNombrecompleto(paciente.getPaciNombrecompleto());
-//            pacienteExistente.setPaciSexo(paciente.getPaciSexo());
-//            pacienteExistente.setPaciFecNacimiento(paciente.getPaciFecNacimiento());
-//            pacienteExistente.setPaciDni(paciente.getPaciDni());
-//            pacienteExistente.setPaciEstadoCivil(paciente.getPaciEstadoCivil());
-//            pacienteExistente.setPaciDireccion(paciente.getPaciDireccion());
-//            pacienteExistente.setPaciTelefono(paciente.getPaciTelefono());
-//            pacienteExistente.setPaciEmail(paciente.getPaciEmail());
-//            pacienteExistente.setPaciApoderado(paciente.getPaciApoderado());
+            // Actualizar solo estado
             pacienteExistente.setPaciEstado(paciente.getPaciEstado());
             
             Paciente pacienteActualizado = pacienteService.save(pacienteExistente);
@@ -309,6 +300,84 @@ public class PacienteController {
         } catch (Exception ex) {
             result.put("success", false);
             result.put("message", "Error al actualizar: " + ex.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    // Editar paciente completo (con datos de persona)
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<?> editarPacienteCompleto(@PathVariable Integer id, @RequestBody RegistrarPacienteDTO dto) {
+        HashMap<String, Object> result = new HashMap<>();
+        
+        try {
+            // Buscar paciente existente
+            Paciente pacienteExistente = pacienteService.findById(id);
+            
+            if (pacienteExistente == null) {
+                result.put("success", false);
+                result.put("message", "No existe paciente con Id: " + id);
+                return new ResponseEntity<>(result, HttpStatus.NOT_FOUND);
+            }
+            
+            // Validaciones
+            if (dto.getNombrecompleto() == null || dto.getNombrecompleto().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El nombre completo es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getTipoDoc() == null) {
+                result.put("success", false);
+                result.put("message", "El tipo de documento es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            if (dto.getNroDoc() == null || dto.getNroDoc().isEmpty()) {
+                result.put("success", false);
+                result.put("message", "El número de documento es requerido");
+                return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+            }
+            
+            // Actualizar datos de Persona
+            Personas personaExistente = pacienteExistente.getPersona();
+            personaExistente.setPersNombrecompleto(dto.getNombrecompleto());
+            personaExistente.setPersTipoDoc(dto.getTipoDoc());
+            personaExistente.setPersNroDoc(dto.getNroDoc());
+            personaExistente.setPersSexo(dto.getSexo());
+            personaExistente.setPersFecNacimiento(dto.getFecNacimiento());
+            personaExistente.setPersEstadoCivil(dto.getEstadoCivil());
+            personaExistente.setPersTelefono(dto.getTelefono());
+            personaExistente.setPersEmail(dto.getEmail());
+            personaExistente.setPersDireccion(dto.getDireccion());
+            personaExistente.setPersFotoUrl(dto.getFotoUrl());
+            
+            // Actualizar apoderado si cambió
+            if (dto.getApoderadoPersId() != null) {
+                Personas apoderado = new Personas();
+                apoderado.setPersId(dto.getApoderadoPersId());
+                pacienteExistente.setApoderado(apoderado);
+            } else {
+                pacienteExistente.setApoderado(null);
+            }
+            
+            // Guardar cambios
+            Paciente pacienteActualizado = pacienteService.save(pacienteExistente);
+            
+            // Convertir a DTO de respuesta
+            PacienteConPersonaDTO responseDTO = convertirADTO(pacienteActualizado);
+            
+            result.put("success", true);
+            result.put("message", "Paciente actualizado exitosamente");
+            result.put("data", responseDTO);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+            
+        } catch (RuntimeException e) {
+            result.put("success", false);
+            result.put("message", e.getMessage());
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            result.put("success", false);
+            result.put("message", "Error al actualizar paciente: " + e.getMessage());
             return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
