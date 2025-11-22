@@ -12,7 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout repo
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
     - name: ConfigurarJDK 21
       uses: actions/setup-java@v4
       with:
@@ -20,9 +24,22 @@ jobs:
         distribution: 'temurin'
         cache: maven
     
+    # Ejecutar pruebas unitarias
     - name: Ejecutar pruebas unitarias
       run: mvn test
       
+    # Analisis SonarCloud
+    - name: SonarCloud analysis
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn sonar:sonar \
+          -Dsonar.projectKey=renzzoupia_backend-clinicarodriguez \
+          -Dsonar.organization=teamupeu \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          
+    # Construir el jar  
     - name: Construir con Maven
       run: mvn clean install -DskipTests=true
 
