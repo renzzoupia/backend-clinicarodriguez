@@ -2,9 +2,7 @@
 FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
-
 EXPOSE 8080
 
-COPY target/api-clinicarodriguez.jar app.jar
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ADD target/clinicarodriguez-0.0.1-SNAPSHOT.jar target/aclinicarodriguez-0.0.1-SNAPSHOT.jar
+ENTRYPOINT ["java", "-jar", "/clinicarodriguez-0.0.1-SNAPSHOT.jar"]
