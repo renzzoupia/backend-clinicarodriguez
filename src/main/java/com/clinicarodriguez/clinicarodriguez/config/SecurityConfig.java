@@ -31,12 +31,20 @@ public class SecurityConfig {
                 // Endpoints públicos (sin autenticación)
                 .requestMatchers("/api/auth/**").permitAll()  // Login y registro
                 .requestMatchers("/api/files/**").permitAll()  // Archivos estáticos (fotos, documentos)
+                    
+                // Swagger UI (documentación de API)
+                .requestMatchers("/swagger-ui/**").permitAll()  // Interfaz de Swagger
+                .requestMatchers("/swagger-ui.html").permitAll()  // Página principal Swagger
+                .requestMatchers("/v3/api-docs/**").permitAll()  // Documentación OpenAPI JSON
+                .requestMatchers("/swagger-resources/**").permitAll()  // Recursos adicionales
+                .requestMatchers("/webjars/**").permitAll()  // Dependencias de Swagger
                 
                 // Endpoints públicos específicos del sistema
                 .requestMatchers("/api/especialidades").permitAll()  // Listar especialidades
                 .requestMatchers("/api/disponibilidad/especialidad/**").permitAll()  // Disponibilidad por especialidad
                 .requestMatchers("/api/medicos/ver-medicos").permitAll()  // Ver médicos (solo info básica)
                 .requestMatchers("/api/pacientes/registrar").permitAll()  // Registro de pacientes
+                .requestMatchers("/api/usuarios/registrar").permitAll()
                 .requestMatchers("/api/citas").permitAll()  // Crear citas (POST)
                 .requestMatchers("/api/pacientes/dni/**").permitAll()  // Buscar paciente por DNI
                 .requestMatchers("/api/documentos/paciente/dni/**").permitAll()  // Documentos por DNI
