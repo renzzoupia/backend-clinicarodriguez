@@ -1,6 +1,10 @@
 # Stage 1: Build the application
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
 EXPOSE 8080
 
-ADD target/api-clinicarodriguez.jar target/api-clinicarodriguez.jar
-ENTRYPOINT ["java", "-jar", "/api-clinicarodriguez.jar"]
+COPY target/api-clinicarodriguez.jar app.jar
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
