@@ -91,18 +91,6 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-security</artifactId>
                 </dependency>
-
-                <!-- ===================================== -->
-                <!-- OPCIONAL: Para encriptar contraseñas -->
-                <!-- ===================================== -->
-
-                <!-- BCrypt ya viene incluido en spring-boot-starter-security -->
-                <!-- No necesitas agregar nada adicional -->
-
-                <!-- ===================================== -->
-                <!-- OPCIONAL: Para validaciones -->
-                <!-- ===================================== -->
-
                 <!-- Bean Validation API -->
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
