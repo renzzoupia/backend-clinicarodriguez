@@ -1,0 +1,33 @@
+name: CI/CD backend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 24
+      uses: actions/setup-java@v4
+      with:
+        java-version: '24'
+        distribution: 'temurin'
+        cache: maven
+    - name: Build with Maven
+      run: mvn clean install
+
+    - name: Build & push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v6
+      with: 
+        image: renzzzoup/api-clinicarodriguez-image
+        tags: latest
+        registry: docker.io
+        dockerfile: Dockerfile_v2
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
