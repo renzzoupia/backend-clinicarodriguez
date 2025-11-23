@@ -17,7 +17,12 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("http://localhost*", "http://127.0.0.1*")
+                        .allowedOriginPatterns(
+                            "http://localhost*",           // Desarrollo local
+                            "http://127.0.0.1*",           // Desarrollo local (IP)
+                            "http://69.62.104.84*",        // Servidor de producción
+                            "https://69.62.104.84*"        // Servidor con HTTPS
+                        )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("*")
                         .exposedHeaders("Authorization", "Content-Type")
