@@ -50,7 +50,7 @@ jobs:
         dockerfile: Dockerfile_v2
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    # 7. Conectarse al VPS y desplegar usando docker-compose
+    # Conectarse al VPS y desplegar usando docker-compose
     - name: Deploy to VPS
       uses: appleboy/ssh-action@v1.2.0
       with:
