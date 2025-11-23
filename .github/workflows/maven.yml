@@ -55,10 +55,10 @@ jobs:
       uses: appleboy/ssh-action@v1.2.0
       with:
         host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
+        username: deploy
         key: ${{ secrets.VPS_SSH_KEY }}
         script: |
-          cd /var/www/app-clinica
+          cd /apps/backend
           docker-compose pull
           docker-compose down
           docker-compose up -d --remove-orphans
