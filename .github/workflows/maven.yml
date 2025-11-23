@@ -50,3 +50,15 @@ jobs:
         dockerfile: Dockerfile_v2
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+    # 7. Conectarse al VPS y desplegar usando docker-compose
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /var/www/app-clinica
+          docker-compose pull
+          docker-compose down
+          docker-compose up -d --remove-orphans
