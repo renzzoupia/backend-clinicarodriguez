@@ -50,16 +50,21 @@ jobs:
         dockerfile: Dockerfile_v2
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        
     # 7. Conectarse al VPS y desplegar usando docker-compose
-    - name: Deploy to VPS
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: deploy
-        key: ${{ secrets.VPS_SSH_KEY }}
-        script_stop: true
-        script: |
-          cd /apps/backend
-          docker compose pull
-          docker compose down
-          docker compose up -d --remove-orphans
+    - name: Debug VPS_SSH_KEY
+      run: |
+        if [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
+          echo "❌ VPS_SSH_KEY está vacío o no disponible."
+          exit 1
+        else
+          echo "✅ VPS_SSH_KEY está presente (no se muestra por seguridad)."
+        fi
+    - name: Debug VPS_SSH_KEY
+      run: |
+        if [ -z "${{ secrets.VPS_HOST  }}" ]; then
+          echo "❌ VPS_SSH_KEY está vacío o no disponible."
+          exit 1
+        else
+          echo "✅ VPS_SSH_KEY está presente (no se muestra por seguridad)."
+        fi
