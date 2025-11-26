@@ -44,4 +44,12 @@ public interface PacienteRepository extends JpaRepository<Paciente, Integer> {
     @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per " +
            "WHERE per.persNroDoc = :dni")
     Optional<Paciente> findByDniExacto(@Param("dni") String dni);
+    
+    // Buscar pacientes por DNI parcial SIN historia clínica (para autocompletado)
+    @Query("SELECT p FROM Paciente p JOIN FETCH p.persona per " +
+           "WHERE per.persNroDoc LIKE CONCAT(:dniBusqueda, '%') " +
+           "AND p.paciEstado = true " +
+           "AND NOT EXISTS (SELECT h FROM Historias h WHERE h.paciente.paciId = p.paciId) " +
+           "ORDER BY per.persNroDoc")
+    List<Paciente> findByDniStartingWithSinHistoria(@Param("dniBusqueda") String dniBusqueda);
 }

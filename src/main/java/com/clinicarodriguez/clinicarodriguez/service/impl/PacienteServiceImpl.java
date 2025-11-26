@@ -175,6 +175,22 @@ public class PacienteServiceImpl implements PacienteService {
     }
     
     @Override
+    public List<Paciente> buscarPorDniSinHistoria(String dniBusqueda, int limite) {
+        if (dniBusqueda == null || dniBusqueda.trim().isEmpty()) {
+            return List.of();
+        }
+        
+        List<Paciente> resultados = pacienteRepository.findByDniStartingWithSinHistoria(dniBusqueda.trim());
+        
+        // Limitar los resultados al límite especificado
+        if (resultados.size() > limite) {
+            return resultados.subList(0, limite);
+        }
+        
+        return resultados;
+    }
+    
+    @Override
     public Optional<Paciente> findByDni(String dni) {
         if (dni == null || dni.trim().isEmpty()) {
             return Optional.empty();

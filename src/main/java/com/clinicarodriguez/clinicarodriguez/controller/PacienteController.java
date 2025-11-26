@@ -124,7 +124,7 @@ public class PacienteController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
-    // Buscar pacientes por DNI (autocompletado)
+    // Buscar pacientes por DNI (autocompletado) - SOLO SIN HISTORIA CLÍNICA
     @GetMapping("/buscar/dni")
     public ResponseEntity<?> buscarPorDni(@RequestParam(name = "dni", required = true) String dni) {
         HashMap<String, Object> result = new HashMap<>();
@@ -138,8 +138,8 @@ public class PacienteController {
                 return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
             }
             
-            // Buscar pacientes (máximo 10 resultados)
-            List<Paciente> pacientes = pacienteService.buscarPorDni(dni, 10);
+            // Buscar pacientes SIN historia clínica (máximo 10 resultados)
+            List<Paciente> pacientes = pacienteService.buscarPorDniSinHistoria(dni, 10);
             
             // Convertir a DTO simplificado
             List<PacienteSimpleDTO> pacientesDTO = pacientes.stream()
@@ -152,7 +152,7 @@ public class PacienteController {
                 .collect(Collectors.toList());
             
             result.put("success", true);
-            result.put("message", "Búsqueda completada");
+            result.put("message", "Pacientes sin historia clínica encontrados");
             result.put("data", pacientesDTO);
             result.put("total", pacientesDTO.size());
             return new ResponseEntity<>(result, HttpStatus.OK);

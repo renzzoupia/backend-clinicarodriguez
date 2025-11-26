@@ -27,6 +27,7 @@ public interface PacienteService {
     List<Paciente> findAllActivosConPersona();
     List<Paciente> findAllConPersona();
     List<Paciente> buscarPorDni(String dniBusqueda, int limite);
+    List<Paciente> buscarPorDniSinHistoria(String dniBusqueda, int limite);
     Optional<Paciente> findByDni(String dni);
     
     // Validaciones
